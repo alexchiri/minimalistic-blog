@@ -54,7 +54,8 @@ app.use(function *(next) {
             this.body = index
                 .replace( '${markup}', markup )
                 .replace( '${state}', state )
-                .replace( '${webserver}', webserver);
+                .replace( '${webserver}', webserver)
+                .replace( '${BLOG_TITLE}', process.env.BLOG_TITLE);
 
             callback(null);
         });

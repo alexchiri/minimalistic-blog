@@ -1,3 +1,5 @@
 .idea
 node_modules
 static/dist
+.DS_Store
+static/.DS_Store
