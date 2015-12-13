@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
-import counter from './counter';
+import blog from './blog';
+import posts from './posts';
 
 export default combineReducers({
-    counter
+    blog,
+    posts
 });

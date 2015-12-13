@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import koa from "koa";
+import koaRouter from 'koa-router';
 import proxy from "koa-proxy";
 import serve from "koa-static";
 import React from "react";
@@ -16,12 +17,18 @@ import { createStore,
 
 import createRoutes from '../shared/routes';
 import rootReducer from '../shared/reducers/root';
+import posts from './api/posts';
 
-const app      = koa();
-const hostname = process.env.HOSTNAME || "localhost";
-const port     = process.env.PORT || 8000;
+const app       = koa();
+const appRouter = koaRouter();
+const hostname  = process.env.HOSTNAME || "localhost";
+const port      = process.env.PORT || 8000;
 
 app.use(serve("static", {defer: true}));
+
+app.use(appRouter.routes());
+
+app.use(posts);
 
 app.use(function *(next) {
     const location = createLocation(this.path);
@@ -41,7 +48,9 @@ app.use(function *(next) {
             }
 
             const index = fs.readFileSync(path.resolve(__dirname, '../index.html'), {encoding: 'utf-8'} );
-            const store = applyMiddleware(thunk)(createStore)(rootReducer);
+            const initialState = {posts: [], blog: {name: process.env.BLOG_TITLE}};
+
+            const store = applyMiddleware(thunk)(createStore)(rootReducer, initialState);
             const webserver = process.env.NODE_ENV === "production" ? "" : "//" + hostname + ":8080";
 
             var markup = ReactDOM.renderToString(
@@ -61,7 +70,6 @@ app.use(function *(next) {
         });
     });
 });
-
 
 app.listen(port, () => {
     console.info("==> ✅  Server is listening");
