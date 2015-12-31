@@ -6,7 +6,7 @@ import proxy from "koa-proxy";
 import serve from "koa-static";
 import React from "react";
 import ReactDOM from 'react-dom/server';
-import {Router, RoutingContext, match, Route} from "react-router";
+import {Router, RouterContext, match, Route} from "react-router";
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import createLocation from 'history/lib/createLocation'
@@ -55,7 +55,7 @@ app.use(function *(next) {
 
             var markup = ReactDOM.renderToString(
                 <Provider store={store}>
-                    <RoutingContext {...renderProps}/>
+                    <RouterContext {...renderProps}/>
                 </Provider>
             );
             let state = JSON.stringify( store.getState() );
