@@ -9,11 +9,11 @@ import ReactDOM from 'react-dom/server';
 import {Router, RouterContext, match, Route} from "react-router";
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import createLocation from 'history/lib/createLocation'
-import createMemoryHistory from 'history/lib/createMemoryHistory';
+import {createMemoryHistory} from 'history'
 import { createStore,
     combineReducers,
     applyMiddleware }  from 'redux';
+import { apiMiddleware } from 'redux-api-middleware';
 
 import createRoutes from '../shared/routes';
 import rootReducer from '../shared/reducers/root';
@@ -31,8 +31,8 @@ app.use(appRouter.routes());
 app.use(posts);
 
 app.use(function *(next) {
-    const location = createLocation(this.path);
     let history = createMemoryHistory();
+    const location = history.createLocation(this.path);
     let routes = createRoutes(history);
 
     yield ((callback) => {
@@ -50,7 +50,7 @@ app.use(function *(next) {
             const index = fs.readFileSync(path.resolve(__dirname, '../index.html'), {encoding: 'utf-8'} );
             const initialState = {posts: [], blog: {name: process.env.BLOG_TITLE}};
 
-            const store = applyMiddleware(thunk)(createStore)(rootReducer, initialState);
+            const store = applyMiddleware(thunk, apiMiddleware)(createStore)(rootReducer, initialState);
             const webserver = process.env.NODE_ENV === "production" ? "" : "//" + hostname + ":8080";
 
             var markup = ReactDOM.renderToString(

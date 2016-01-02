@@ -22,7 +22,7 @@ if (window.$REDUX_STATE) {
 }
 
 const logger = createLogger();
-const createStoreWithMiddleware = applyMiddleware(apiMiddleware, thunk, logger)(createStore);
+const createStoreWithMiddleware = applyMiddleware(thunk, apiMiddleware, logger)(createStore);
 const store = createStoreWithMiddleware(rootReducer, state);
 
 /**
