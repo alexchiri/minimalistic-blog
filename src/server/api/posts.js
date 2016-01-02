@@ -5,6 +5,14 @@ import readline from 'readline';
 
 const router = koaRouter();
 
+function lineReaderThunk(lineReader) {
+    return function(done) {
+        lineReader.on('line', function (line) {
+            done(null, line);
+        });
+    }
+}
+
 router.get('/posts', function*(next) {
     const postsBaseDir = path.resolve(__dirname, '../../../posts');
     const posts = fs.readdirSync(postsBaseDir);
@@ -20,9 +28,8 @@ router.get('/posts', function*(next) {
 
         postData[postFilename] = [];
 
-        lineReader.on('line', function (line) {
-            postData[postFilename].push(line);
-        });
+        var line = yield lineReaderThunk(lineReader);
+        postData[postFilename].push(line);
     }
 
     this.body = postData;
