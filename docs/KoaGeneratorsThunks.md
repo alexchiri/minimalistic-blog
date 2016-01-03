@@ -78,13 +78,13 @@ If you would expect to see a nice JSON response, with the content of each file, 
 The reason for this surprising result is the fact that the lines of each file are added to the `postData` map through a callback. Basically, `this.body = postData;` is executed and the response is sent before any line of any file is read. 
 
 So callbacks and Koa middleware don't make good company. What we need to understand are generators. 
-Noticed the `*` from line 1 `router.get('/posts', function*(next) {`? The asterisk char is not there just for the esthetic reasons, it's syntactic sugar to show that `function*(next)` is a generator.
+Noticed the `*` from line 10 `router.get('/posts', function*(next) {`? The asterisk char is not there just for the esthetic reasons, it's syntactic sugar to show that `function*(next)` is a generator.
 
 Before we move on, I recommend a reading list, these articles will explain the matters way better than me:
 
 * [The Basics Of ES6 Generators](https://davidwalsh.name/es6-generators)
 * [Generators in Node.js: Common Misconceptions and Three Good Use Cases](https://strongloop.com/strongblog/how-to-generators-node-js-yield-use-cases/)
-* A possible solution to my issue with Koa and `readline` [thunk you very much](http://chris.neosavvy.com/koa-js-thunks/)
+* A possible solution to my issue with Koa and `readline`: [thunk you very much](http://chris.neosavvy.com/koa-js-thunks/)
 
 The solution, in the end
 ------------------------
