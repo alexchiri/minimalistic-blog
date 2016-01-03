@@ -21,7 +21,7 @@ function readPostFile(postFilePath) {
             } else if(headerCounter == 1) {
                 let headerComponents = line.split(':', 2);
                 postData[headerComponents[0]] = headerComponents[1].trim();
-            } else if(headerCounter == 2 && line.trim() !== "") {
+            } else if(headerCounter == 2) {
                 postData.content += (line + "<br/>");
             }
         });
@@ -35,12 +35,27 @@ function readPostFile(postFilePath) {
 router.get('/', function*(next) {
     const postsBaseDir = path.resolve(__dirname, '../../../posts');
     const posts = fs.readdirSync(postsBaseDir);
-    var postsData = [];
-    let md = markdownIt({html: true, typographer: true});
+    const POSTS_PAGE_SIZE = parseInt(process.env.POSTS_PAGE_SIZE);
 
-    for (let i = 0, len = posts.length; i < len; i++) {
+    let offset = this.request.query.offset ? this.request.query.offset : 1;
+    if(offset > posts.length) {
+        offset = posts.length - POSTS_PAGE_SIZE
+    }
+
+    console.log("limit1", offset + POSTS_PAGE_SIZE);
+
+    let limit = (offset + POSTS_PAGE_SIZE - 1) > posts.length ? posts.length : offset + POSTS_PAGE_SIZE - 1;
+
+    console.log("offset", offset);
+    console.log("limit", limit);
+
+    var postsData = [];
+    let md = markdownIt({html: true});
+
+    for (let i = offset - 1; i < limit; i++) {
         let postFilename = posts[i];
         const postFilePath = path.resolve(postsBaseDir, postFilename);
+
         let postData = yield readPostFile(postFilePath);
 
         postData.renderedContent = md.render(postData.content);
