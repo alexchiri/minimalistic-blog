@@ -34,16 +34,24 @@ function readPostFile(postFilePath) {
 
 router.get('/', function*(next) {
     const postsBaseDir = path.resolve(__dirname, '../../../posts');
-    const posts = fs.readdirSync(postsBaseDir);
+    const posts = fs.readdirSync(postsBaseDir).reverse();
     const POSTS_PAGE_SIZE = parseInt(process.env.POSTS_PAGE_SIZE);
 
-    let offset = this.request.query.offset ? this.request.query.offset : 1;
+    let offset = parseInt(this.request.query.offset);
+    if(isNaN(offset) || offset < 1) {
+        offset = 1;
+    }
+
     if(offset > posts.length) {
         offset = posts.length - POSTS_PAGE_SIZE
     }
-    let limit = (offset + POSTS_PAGE_SIZE - 1) > posts.length ? posts.length : offset + POSTS_PAGE_SIZE - 1;
 
-    var postsData = [];
+    let limit = offset + POSTS_PAGE_SIZE - 1;
+    if(limit > posts.length) {
+        limit = posts.length;
+    }
+
+    var postsData = { posts: [], offset: offset, total: posts.length };
 
     for (let i = offset - 1; i < limit; i++) {
         let postFilename = posts[i];
@@ -54,8 +62,10 @@ router.get('/', function*(next) {
         postData.renderedContent = new showdown.Converter().makeHtml(postData.content);
         delete postData.content;
 
-        postsData.push(postData);
+        postsData.posts.push(postData);
     }
+
+    postsData.size = postsData.posts.length;
 
     this.body = postsData;
 });

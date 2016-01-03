@@ -14,6 +14,7 @@ import { createStore,
     combineReducers,
     applyMiddleware }  from 'redux';
 import { apiMiddleware } from 'redux-api-middleware';
+import koaLogger from 'koa-logger';
 
 import createRoutes from '../shared/routes';
 import rootReducer from '../shared/reducers/root';
@@ -25,6 +26,10 @@ const hostname  = process.env.HOSTNAME || "localhost";
 const port      = process.env.PORT || 8000;
 
 app.use(serve("static", {defer: true}));
+
+if(process.env.NODE_ENV !== "production") {
+    app.use(koaLogger());
+}
 
 app.use(appRouter.routes());
 
@@ -48,7 +53,7 @@ app.use(function *(next) {
             }
 
             const index = fs.readFileSync(path.resolve(__dirname, '../index.html'), {encoding: 'utf-8'} );
-            const initialState = {posts: [], blog: {name: process.env.BLOG_TITLE}};
+            const initialState = {blog: {name: process.env.BLOG_TITLE, pageSize: parseInt(process.env.POSTS_PAGE_SIZE)}};
 
             const store = applyMiddleware(thunk, apiMiddleware)(createStore)(rootReducer, initialState);
             const webserver = process.env.NODE_ENV === "production" ? "" : "//" + hostname + ":8080";

@@ -12,7 +12,7 @@ export default class HomePost extends Component {
     render() {
         return (
             <div>
-                <h4>{this.props.post.title}</h4>
+                <h2>{this.props.post.title}</h2>
                 <div dangerouslySetInnerHTML={this.getPostContent()}>
                 </div>
             </div>
