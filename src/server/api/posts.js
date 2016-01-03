@@ -2,7 +2,7 @@ import koaRouter from 'koa-router';
 import fs from 'fs';
 import path from 'path'
 import readline from 'readline';
-import markdownIt from 'markdown-it';
+import showdown from 'showdown';
 
 const router = koaRouter({prefix: '/api/posts'});
 
@@ -22,7 +22,7 @@ function readPostFile(postFilePath) {
                 let headerComponents = line.split(':', 2);
                 postData[headerComponents[0]] = headerComponents[1].trim();
             } else if(headerCounter == 2) {
-                postData.content += (line + "<br/>");
+                postData.content += (line + "\n");
             }
         });
 
@@ -41,16 +41,9 @@ router.get('/', function*(next) {
     if(offset > posts.length) {
         offset = posts.length - POSTS_PAGE_SIZE
     }
-
-    console.log("limit1", offset + POSTS_PAGE_SIZE);
-
     let limit = (offset + POSTS_PAGE_SIZE - 1) > posts.length ? posts.length : offset + POSTS_PAGE_SIZE - 1;
 
-    console.log("offset", offset);
-    console.log("limit", limit);
-
     var postsData = [];
-    let md = markdownIt({html: true});
 
     for (let i = offset - 1; i < limit; i++) {
         let postFilename = posts[i];
@@ -58,7 +51,7 @@ router.get('/', function*(next) {
 
         let postData = yield readPostFile(postFilePath);
 
-        postData.renderedContent = md.render(postData.content);
+        postData.renderedContent = new showdown.Converter().makeHtml(postData.content);
         delete postData.content;
 
         postsData.push(postData);
