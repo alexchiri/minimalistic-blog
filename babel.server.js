@@ -9,7 +9,7 @@ require("babel-core/register")({
     presets: ["es2015", "react", "stage-0"]
 });
 
-require('dotenv').load();
+require('dotenv').load({path: process.env.NODE_ENV === "production" ? `.env.${process.env.NODE_ENV}` : '.env'});
 /**
  * Define isomorphic constants.
  */
