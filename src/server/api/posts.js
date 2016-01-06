@@ -5,6 +5,9 @@ import readline from 'readline';
 import showdown from 'showdown';
 
 const router = koaRouter({prefix: '/api/posts'});
+const postsBaseDir = path.resolve(__dirname, '../../../posts');
+const posts = fs.readdirSync(postsBaseDir).reverse();
+const POSTS_PAGE_SIZE = parseInt(process.env.POSTS_PAGE_SIZE);
 
 function readPostFile(postFilePath) {
     return function(done) {
@@ -33,10 +36,6 @@ function readPostFile(postFilePath) {
 }
 
 router.get('/', function*(next) {
-    const postsBaseDir = path.resolve(__dirname, '../../../posts');
-    const posts = fs.readdirSync(postsBaseDir).reverse();
-    const POSTS_PAGE_SIZE = parseInt(process.env.POSTS_PAGE_SIZE);
-
     let offset = parseInt(this.request.query.offset);
     if(isNaN(offset) || offset < 1) {
         offset = 1;
@@ -68,6 +67,30 @@ router.get('/', function*(next) {
     postsData.size = postsData.posts.length;
 
     this.body = postsData;
+});
+
+router.get('/:slug', function*(next) {
+    let slug = this.params.slug;
+
+    let found = false;
+    let post;
+    for (let i = 0; i < posts.length && !found; i++) {
+        let postFilename = posts[i];
+        const postFilePath = path.resolve(postsBaseDir, postFilename);
+
+        let postData = yield readPostFile(postFilePath);
+        if(postData.slug == slug) {
+            found = true;
+            postData.renderedContent = new showdown.Converter().makeHtml(postData.content);
+            post = postData;
+        }
+    }
+
+    if(found) {
+        this.body = post;
+    } else {
+        this.throw(404, 'post not found');
+    }
 });
 
 export default router.middleware();

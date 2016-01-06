@@ -15,7 +15,11 @@ import { createStore,
 
 let state = null;
 if (window.$REDUX_STATE) {
-    state = window.$REDUX_STATE;
+    let serverState = window.$REDUX_STATE;
+    let blog = serverState.blog;
+    let posts = serverState.posts;
+
+    state = { blog: fromJS(blog), posts: fromJS(posts) };
 
     //this delete doesn't do anything - figure out
     delete window.$REDUX_STATE;

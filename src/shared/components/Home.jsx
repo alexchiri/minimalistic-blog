@@ -31,7 +31,7 @@ export class Home extends Component {
 
 Home.propTypes = {
     getPosts: PropTypes.func.isRequired,
-    posts: PropTypes.array.isRequired,
+    posts: PropTypes.object.isRequired,
     pageSize: PropTypes.number.isRequired,
     offset: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired
@@ -39,11 +39,11 @@ Home.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        blogName: state.blog.name,
-        pageSize: state.blog.pageSize,
-        posts: state.posts.posts,
-        offset: state.posts.offset,
-        total: state.posts.total
+        blogName: state.blog.get('name'),
+        pageSize: state.blog.get('pageSize'),
+        posts: state.posts.get('posts'),
+        offset: state.posts.get('offset'),
+        total: state.posts.get('total')
     }
 }
 
