@@ -39,7 +39,6 @@ Home.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        blogName: state.blog.get('name'),
         pageSize: state.blog.get('pageSize'),
         posts: state.posts.get('posts'),
         offset: state.posts.get('offset'),

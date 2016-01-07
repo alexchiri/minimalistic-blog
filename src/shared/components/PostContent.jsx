@@ -11,12 +11,16 @@ export default class PostContent extends Component {
     }
 
     render() {
+        let postContentStyle = {
+            textAlign: "justify"
+        };
+
         return(
-            <div className="post">
+            <div>
                 <h1>{ this.props.post.get('title') }</h1>
                 Alexandru Chirițescu | { this.getFormattedDate() }
 
-                <div className="post_content" dangerouslySetInnerHTML={this.getPostContent()}>
+                <div style={postContentStyle} dangerouslySetInnerHTML={this.getPostContent()}>
                 </div>
             </div>
         );

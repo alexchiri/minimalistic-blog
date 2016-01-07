@@ -12,11 +12,14 @@ export default class HomePost extends Component {
 
     render() {
         const {post} = this.props;
+        let postContentStyle = {
+            textAlign: "justify"
+        };
 
         return (
             <div>
                 <h2><Link to={`/post/${post.get('slug')}`}>{this.props.post.get('title')}</Link></h2>
-                <div dangerouslySetInnerHTML={this.getPostContent()}>
+                <div style={postContentStyle} dangerouslySetInnerHTML={this.getPostContent()}>
                 </div>
             </div>
         )
