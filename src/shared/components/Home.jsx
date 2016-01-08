@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as postsActions from '../actions/posts';
-import HomePost from './HomePost.jsx';
+import HomePost from './PostContent.jsx';
 import Navigation from './Navigation.jsx';
 
 export class Home extends Component {

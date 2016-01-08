@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {connect} from 'react-redux';
+import InlineCss from "react-inline-css";
 
 export class App extends Component {
     constructor(props) {
@@ -7,23 +8,48 @@ export class App extends Component {
     }
 
     render() {
-        let contentStyle = {
-            margin: "0 auto",
-            paddingTop: "15px",
-            width: "500px",
-            textAlign: "center",
-            position: "relative"
-        };
+        let blogWrapperStyle = `
+            & {
+                margin: 0 auto;
+                padding-top: 15px;
+                width: 500px;
+                text-align: center;
+                position: relative;
+                background: #fff;
+                font: 70% Georgia, "Times New Roman", Times, serif;
+                color: #333;
+            }
 
-        return(
-            <div style={contentStyle}>
-                <h1>
-                    <a href="/">{this.props.blogName}</a>
-                </h1>
-                <div>
-                    {this.props.children}
+            & .titleHeader {
+                margin: 10px 0 20px;
+                font-size: 3.3em;
+                font-weight: normal;
+                letter-spacing: .05em;
+                word-spacing: .2em;
+            }
+
+            & .titleHeader a:link, & .titleHeader a:visited {
+                color: #000;
+                text-decoration: none;
+            }
+
+            & .titleHeader a:hover, & .titleHeader a:active {
+                color: #000;
+                text-decoration: underline;
+            }
+        `;
+
+        return (
+            <InlineCss stylesheet={blogWrapperStyle}>
+                <div className="blogWrapper">
+                    <h1 className="titleHeader">
+                        <a href="/">{this.props.blogName}</a>
+                    </h1>
+                    <div>
+                        {this.props.children}
+                    </div>
                 </div>
-            </div>
+            </InlineCss>
         );
     }
 }

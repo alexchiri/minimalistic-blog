@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as postsActions from '../actions/posts';
-import PostContent from './PostContent.jsx';
+import HomePost from './PostContent.jsx';
 
 export class PostPage extends Component {
     constructor(props) {
@@ -50,7 +50,7 @@ export class PostPage extends Component {
         if(posts.size == 0 || isLoading) {
             content = <div>Loading...</div>;
         } else {
-            content = <PostContent post={posts.find(post => post.get('slug') == slug)}/>
+            content = <HomePost post={posts.find(post => post.get('slug') == slug)}/>
         }
 
         return (
