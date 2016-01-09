@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import * as postsActions from '../actions/posts';
 import PostContent from './PostContent.jsx';
-import Navigation from './Navigation.jsx';
+import Pagination from './Pagination.jsx';
 
 export class Home extends Component {
     constructor(props) {
@@ -23,7 +23,7 @@ export class Home extends Component {
                     </div>
                 )}
 
-                <Navigation {...this.props} />
+                <Pagination {...this.props} />
             </div>
         );
     }
