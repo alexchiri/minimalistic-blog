@@ -54,7 +54,7 @@ app.use(function *(next) {
             }
 
             const index = fs.readFileSync(path.resolve(__dirname, '../index.html'), {encoding: 'utf-8'} );
-            const initialState = { blog: Map({name: process.env.BLOG_TITLE, pageSize: parseInt(process.env.POSTS_PAGE_SIZE)})};
+            const initialState = { blog: Map({name: process.env.BLOG_TITLE, pageSize: parseInt(process.env.POSTS_PAGE_SIZE), author: process.env.AUTHOR})};
 
             const store = applyMiddleware(thunk, apiMiddleware)(createStore)(rootReducer, initialState);
             const webserver = process.env.NODE_ENV === "production" ? "" : "//" + hostname + ":8080";
@@ -70,7 +70,8 @@ app.use(function *(next) {
                 .replace( '${markup}', markup )
                 .replace( '${state}', state )
                 .replace( '${webserver}', webserver)
-                .replace( '${BLOG_TITLE}', process.env.BLOG_TITLE);
+                .replace( '${BLOG_TITLE}', process.env.BLOG_TITLE)
+                .replace( '${favicon}', process.env.FAVICON);
 
             callback(null);
         });

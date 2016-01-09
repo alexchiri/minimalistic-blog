@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import InlineCss from "react-inline-css";
 import moment from 'moment';
 
-export default class HomePost extends Component {
+export default class PostContent extends Component {
     constructor(props) {
         super(props);
     }
@@ -78,7 +78,7 @@ export default class HomePost extends Component {
             <InlineCss stylesheet={postContentStyle}>
                 <div className="post">
                     <h2 className="postTitle"><Link to={`/post/${post.get('slug')}`}>{this.props.post.get('title')}</Link></h2>
-                    <div className="postSubtitle">Alexandru Chirițescu | { this.getFormattedDate() }</div>
+                    <div className="postSubtitle">{this.props.author} | { this.getFormattedDate() }</div>
                     <div className="postContent" dangerouslySetInnerHTML={this.getPostContent()}>
                     </div>
                 </div>
