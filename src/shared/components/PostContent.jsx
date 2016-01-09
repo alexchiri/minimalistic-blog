@@ -23,12 +23,28 @@ export default class HomePost extends Component {
                 margin-top: 50px;
             }
 
-            & .postContent p, & .postContent ul {
+            & .postContent p, & .postContent ul, & .postContent ol {
                 text-align: justify;
                 margin-bottom: 1.7em;
                 font-size: 1.4em;
                 line-height: 1.5em;
                 color: #333;
+            }
+
+            & .postContent code {
+                box-shadow: none;
+                border: none;
+                background-color: #f8f8f8;
+                margin: 0;
+                font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+                color: #333333;
+            }
+
+            & .postContent pre {
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                text-align: left;
+                background-color: #f8f8f8;
             }
 
             & .postTitle {
