@@ -61,7 +61,7 @@ export class PostPage extends Component {
 }
 
 PostPage.propTypes = {
-    posts: PropTypes.array.isRequired,
+    posts: PropTypes.object.isRequired,
     isLoading: PropTypes.bool.isRequired,
     author: PropTypes.string.isRequired
 };
