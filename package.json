@@ -41,6 +41,7 @@
     "koa-static": "2.0.0",
     "moment": "2.11.1",
     "mongoose": "4.3.5",
+    "mongoose-paginate": "^5.0.0",
     "piping": "0.3.0",
     "react": "0.14.6",
     "react-dom": "0.14.6",

@@ -42,8 +42,7 @@ export class PostPage extends Component {
         const {
             isLoading,
             posts,
-            params: {slug},
-            author
+            params: {slug}
             } = this.props;
 
         let content;
@@ -51,7 +50,7 @@ export class PostPage extends Component {
         if(posts.size == 0 || isLoading) {
             content = <div>Loading...</div>;
         } else {
-            content = <HomePost post={posts.find(post => post.get('slug') == slug)} author={author}/>
+            content = <HomePost post={posts.find(post => post.get('slug') == slug)}/>
         }
 
         return (
@@ -63,14 +62,12 @@ export class PostPage extends Component {
 PostPage.propTypes = {
     posts: PropTypes.object.isRequired,
     isLoading: PropTypes.bool.isRequired,
-    author: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
     return {
         posts: state.posts.get('posts'),
         isLoading: state.posts.get('isLoading'),
-        author: state.blog.get('author')
     }
 }
 

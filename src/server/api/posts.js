@@ -3,94 +3,104 @@ import fs from 'fs';
 import path from 'path'
 import readline from 'readline';
 import showdown from 'showdown';
+import mongoose from 'mongoose';
+import {Author, BlogPost} from '../storage/schemas';
 
 const router = koaRouter({prefix: '/api/posts'});
 const postsBaseDir = path.resolve(__dirname, '../../../posts');
 const posts = fs.readdirSync(postsBaseDir).reverse();
 const POSTS_PAGE_SIZE = parseInt(process.env.POSTS_PAGE_SIZE);
 
-function readPostFile(postFilePath) {
+function getPaginatedPosts(offset, limit) {
+    return function (done) {
+        BlogPost.paginate({}, {
+            offset: offset,
+            limit: limit,
+            lean: true,
+            populate: { path: 'author', model: Author, select: "first_name last_name"},
+            select: "-id -_id -__v",
+            sort: {date_published: -1}
+        }, function (err, result) {
+            done(err, result);
+        })
+    }
+}
+
+function getPublishedPostsCount() {
     return function(done) {
-        var postData = { content: "" };
-        var headerCounter = 0;
+        BlogPost.count({draft: false}, function(err, count) {
+            done(err, count);
+        })
+    }
+}
 
-        var lineReader = readline.createInterface({
-            input: fs.createReadStream(postFilePath)
-        });
-
-        lineReader.on('line', function(line){
-            if(line === "---") {
-                headerCounter++;
-            } else if(headerCounter == 1) {
-                let headerComponents = line.split(':', 2);
-                postData[headerComponents[0]] = headerComponents[1].trim();
-            } else if(headerCounter == 2) {
-                postData.content += (line + "\n");
-            }
-        });
-
-        lineReader.on('close', function(){
-            done(null, postData);
+function getPostBySlug(slug) {
+    return function (done) {
+        BlogPost.findOne({slug: slug, draft: false})
+            .lean()
+            .populate({
+                path: 'author',
+                model: Author,
+                select: "first_name last_name"
+            })
+            .select("-id -_id -__v")
+            .exec(function (err, post) {
+                done(err, post);
         });
     }
 }
 
 router.get('/', function*(next) {
+    mongoose.connect(process.env.MONGODB);
+
     let offset = parseInt(this.request.query.offset);
-    if(isNaN(offset) || offset < 1) {
-        offset = 1;
+    if(isNaN(offset) || offset < 0) {
+        offset = 0;
     }
 
-    if(offset > posts.length) {
-        offset = posts.length - POSTS_PAGE_SIZE
+    let noPosts = yield getPublishedPostsCount();
+
+    if(offset >= noPosts) {
+        offset = noPosts - POSTS_PAGE_SIZE
     }
 
-    let limit = offset + POSTS_PAGE_SIZE - 1;
-    if(limit > posts.length) {
-        limit = posts.length;
-    }
+    let postsResult = yield getPaginatedPosts(offset, POSTS_PAGE_SIZE);
+    let postsData = { posts: [], offset: postsResult.offset, total: noPosts };
+    let postDocs = postsResult.docs;
 
-    var postsData = { posts: [], offset: offset, total: posts.length };
-
-    for (let i = offset - 1; i < limit; i++) {
-        let postFilename = posts[i];
-        const postFilePath = path.resolve(postsBaseDir, postFilename);
-
-        let postData = yield readPostFile(postFilePath);
+    for (let i = 0; i < postDocs.length; i++) {
+        let postData = postDocs[i];
 
         postData.renderedContent = new showdown.Converter().makeHtml(postData.content);
-        delete postData.content;
 
+        delete postData.content;
+        delete postData.id;
         postsData.posts.push(postData);
     }
 
     postsData.size = postsData.posts.length;
 
     this.body = postsData;
+
+    mongoose.disconnect();
 });
 
 router.get('/:slug', function*(next) {
+    mongoose.connect(process.env.MONGODB);
+
     let slug = this.params.slug;
+    let post = yield getPostBySlug(slug);
 
-    let found = false;
-    let post;
-    for (let i = 0; i < posts.length && !found; i++) {
-        let postFilename = posts[i];
-        const postFilePath = path.resolve(postsBaseDir, postFilename);
+    if(post) {
+        post.renderedContent = new showdown.Converter().makeHtml(post.content);
+        delete post.content;
 
-        let postData = yield readPostFile(postFilePath);
-        if(postData.slug == slug) {
-            found = true;
-            postData.renderedContent = new showdown.Converter().makeHtml(postData.content);
-            post = postData;
-        }
-    }
-
-    if(found) {
         this.body = post;
     } else {
         this.throw(404, 'post not found');
     }
+
+    mongoose.disconnect();
 });
 
 export default router.middleware();

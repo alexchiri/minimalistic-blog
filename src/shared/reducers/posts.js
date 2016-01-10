@@ -2,7 +2,7 @@ import {GET_POSTS_REQUEST, GET_POSTS_SUCCESS, GET_POSTS_FAILURE,
          GET_POST_REQUEST, GET_POST_SUCCESS, GET_POST_FAILURE} from '../actions/posts';
 import {Map, List, fromJS} from 'immutable';
 
-const initialState = Map({ posts: List(), offset: 1, size: 0, total: 0, isLoading: false, didFail: false });
+const initialState = Map({ posts: List(), offset: 0, size: 0, total: 0, isLoading: false, didFail: false });
 
 export default function reducer(state = initialState, action = {}) {
     let newState;

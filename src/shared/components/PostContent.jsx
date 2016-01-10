@@ -77,8 +77,11 @@ export default class PostContent extends Component {
         return (
             <InlineCss stylesheet={postContentStyle}>
                 <div className="post">
-                    <h2 className="postTitle"><Link to={`/post/${post.get('slug')}`}>{this.props.post.get('title')}</Link></h2>
-                    <div className="postSubtitle">{this.props.author} | { this.getFormattedDate() }</div>
+                    <h2 className="postTitle"><Link
+                        to={`/post/${post.get('slug')}`}>{this.props.post.get('title')}</Link></h2>
+                    <div
+                        className="postSubtitle">{post.get('author').get('first_name') + " " + post.get('author').get('last_name')}
+                        | { this.getFormattedDate() }</div>
                     <div className="postContent" dangerouslySetInnerHTML={this.getPostContent()}>
                     </div>
                 </div>
