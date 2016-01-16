@@ -5,6 +5,7 @@ import readline from 'readline';
 import showdown from 'showdown';
 import mongoose from 'mongoose';
 import {Author, BlogPost} from '../storage/schemas';
+import jwt from 'jsonwebtoken';
 
 const router = koaRouter({prefix: '/api/posts'});
 const postsBaseDir = path.resolve(__dirname, '../../../posts');

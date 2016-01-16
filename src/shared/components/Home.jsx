@@ -35,7 +35,6 @@ Home.propTypes = {
     pageSize: PropTypes.number.isRequired,
     offset: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
-    author: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
@@ -44,7 +43,6 @@ function mapStateToProps(state) {
         posts: state.posts.get('posts'),
         offset: state.posts.get('offset'),
         total: state.posts.get('total'),
-        author: state.blog.get('author')
     }
 }
 

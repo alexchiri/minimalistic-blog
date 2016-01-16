@@ -20,11 +20,25 @@ import {Map} from 'immutable';
 import createRoutes from '../shared/routes';
 import rootReducer from '../shared/reducers/root';
 import posts from './api/posts';
+import auth from './api/auth';
 
 const app       = koa();
 const appRouter = koaRouter();
 const hostname  = process.env.HOSTNAME || "localhost";
 const port      = process.env.PORT || 8000;
+
+const index = fs.readFileSync(path.resolve(__dirname, '../index.html'), {encoding: 'utf-8'} );
+const initialState = {
+    blog: Map({
+        name: process.env.BLOG_TITLE,
+        pageSize: parseInt(process.env.POSTS_PAGE_SIZE),
+        isAuthenticating: false,
+        isAuthenticated: false,
+        redirectAfterLogin: "/"
+})
+};
+const store = applyMiddleware(thunk, apiMiddleware)(createStore)(rootReducer, initialState);
+const webserver = process.env.NODE_ENV === "production" ? "" : "//" + hostname + ":8080";
 
 app.use(serve("static", {defer: true}));
 
@@ -34,12 +48,18 @@ if(process.env.NODE_ENV !== "production") {
 
 app.use(appRouter.routes());
 
+app.use(auth);
 app.use(posts);
 
 app.use(function *(next) {
+    // required by the material-ui lib
+    GLOBAL.navigator = {
+        userAgent: this.request.headers['user-agent']
+    };
+
     let history = createMemoryHistory();
     const location = history.createLocation(this.path);
-    let routes = createRoutes(history);
+    let routes = createRoutes(store, history);
 
     yield ((callback) => {
         match({routes, location}, (error, redirectLocation, renderProps) => {
@@ -52,12 +72,6 @@ app.use(function *(next) {
                 callback(error);
                 return;
             }
-
-            const index = fs.readFileSync(path.resolve(__dirname, '../index.html'), {encoding: 'utf-8'} );
-            const initialState = { blog: Map({name: process.env.BLOG_TITLE, pageSize: parseInt(process.env.POSTS_PAGE_SIZE)})};
-
-            const store = applyMiddleware(thunk, apiMiddleware)(createStore)(rootReducer, initialState);
-            const webserver = process.env.NODE_ENV === "production" ? "" : "//" + hostname + ":8080";
 
             var markup = ReactDOM.renderToString(
                 <Provider store={store}>

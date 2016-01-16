@@ -16,6 +16,8 @@ var BlogPostSchema = new Schema({
 });
 
 var AuthorSchema = new Schema({
+    username: String,
+    password: String,
     first_name: String,
     last_name: String,
     email: String,
