@@ -1,5 +1,9 @@
 .idea
 node_modules
-static/dist
+static/*
 .DS_Store
 static/.DS_Store
+!static/favicon.ico
+posts
+.env.*
+data
