@@ -2,10 +2,10 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import InlineCss from "react-inline-css";
-import TextField from 'material-ui/lib/text-field';
-import RaisedButton from 'material-ui/lib/raised-button';
+import TextField from '../../../../node_modules/material-ui/lib/text-field';
+import RaisedButton from '../../../../node_modules/material-ui/lib/raised-button';
 
-import * as blogActions from '../actions/blog';
+import * as blogActions from '../../actions/blog';
 
 export class Login extends Component {
     constructor(props) {
@@ -23,12 +23,7 @@ export class Login extends Component {
     }
 
     componentDidUpdate() {
-        console.log("in componentWillUpdate");
-        console.log("isAuthenticating", this.props.isAuthenticating);
-        console.log("isAuthenticated", this.props.isAuthenticated);
-
         if(this.props.isAuthenticated) {
-            console.log("will redirect to ", this.props.redirectAfterLogin);
             this.context.router.push({pathname: this.props.redirectAfterLogin})
         }
     }

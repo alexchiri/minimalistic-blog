@@ -21,6 +21,7 @@ import createRoutes from '../shared/routes';
 import rootReducer from '../shared/reducers/root';
 import posts from './api/posts';
 import auth from './api/auth';
+import admin from './api/admin';
 
 const app       = koa();
 const appRouter = koaRouter();
@@ -48,8 +49,9 @@ if(process.env.NODE_ENV !== "production") {
 
 app.use(appRouter.routes());
 
-app.use(auth);
 app.use(posts);
+app.use(admin);
+app.use(auth);
 
 app.use(function *(next) {
     // required by the material-ui lib

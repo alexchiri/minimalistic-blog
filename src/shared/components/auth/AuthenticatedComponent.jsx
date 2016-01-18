@@ -13,7 +13,6 @@ export default function requireAuthentication(Component) {
         }
 
         checkAuth () {
-            console.log("isAuthenticated: ", this.props.isAuthenticated);
             if (!this.props.isAuthenticated) {
                 let redirectAfterLogin = this.props.location.pathname;
                 this.context.router.replace({pathname: '/login', state: {redirectAfterLogin: redirectAfterLogin}});

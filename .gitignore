@@ -7,3 +7,4 @@ static/.DS_Store
 posts
 .env.*
 data
+docs/*.paw

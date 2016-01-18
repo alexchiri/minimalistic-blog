@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import * as postsActions from '../actions/posts';
+import * as postsActions from '../../actions/posts';
 import HomePost from './PostContent.jsx';
 
 export class PostPage extends Component {

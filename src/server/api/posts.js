@@ -1,20 +1,15 @@
 import koaRouter from 'koa-router';
-import fs from 'fs';
-import path from 'path'
-import readline from 'readline';
 import showdown from 'showdown';
 import mongoose from 'mongoose';
 import {Author, BlogPost} from '../storage/schemas';
 import jwt from 'jsonwebtoken';
 
 const router = koaRouter({prefix: '/api/posts'});
-const postsBaseDir = path.resolve(__dirname, '../../../posts');
-const posts = fs.readdirSync(postsBaseDir).reverse();
 const POSTS_PAGE_SIZE = parseInt(process.env.POSTS_PAGE_SIZE);
 
 function getPaginatedPosts(offset, limit) {
     return function (done) {
-        BlogPost.paginate({}, {
+        BlogPost.paginate({draft: false}, {
             offset: offset,
             limit: limit,
             lean: true,

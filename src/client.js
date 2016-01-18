@@ -12,14 +12,22 @@ import createLogger from 'redux-logger';
 import { createStore,
     combineReducers,
     applyMiddleware }  from 'redux';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+injectTapEventPlugin();
 
 let state = null;
 if (window.$REDUX_STATE) {
     let serverState = window.$REDUX_STATE;
     let blog = serverState.blog;
     let posts = serverState.posts;
+    let admin = serverState.admin;
 
-    state = { blog: fromJS(blog), posts: fromJS(posts) };
+    state = {
+        blog: fromJS(blog),
+        posts: fromJS(posts),
+        admin: fromJS(admin)
+    };
 
     //this delete doesn't do anything - figure out
     delete window.$REDUX_STATE;

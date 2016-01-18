@@ -2,11 +2,13 @@ import React from 'react';
 import {Router, IndexRoute, Route} from 'react-router';
 
 import App from '../shared/components/App.jsx';
-import HomeContainer from '../shared/components/Home.jsx';
-import PostPage from '../shared/components/PostPage.jsx';
-import AdminContainer from '../shared/components/Admin.jsx';
-import Login from '../shared/components/Login.jsx';
-import requireAuthentication from './components/AuthenticatedComponent.jsx';
+import HomeContainer from '../shared/components/front/Home.jsx';
+import PostPage from '../shared/components/front/PostPage.jsx';
+import AdminContainer from '../shared/components/admin/Admin.jsx';
+import Login from '../shared/components/auth/Login.jsx';
+import PostEditor from '../shared/components/admin/PostEditor.jsx';
+import PostList from '../shared/components/admin/PostList.jsx';
+import requireAuthentication from '../shared/components/auth/AuthenticatedComponent.jsx';
 
 export default (store, history) => {
     return (
@@ -18,7 +20,10 @@ export default (store, history) => {
                 { /* <Route path="*" component={NotFound} status={404} /> */ }
             </Route>
 
-            <Route path="/admin" component={requireAuthentication(AdminContainer)}/>
+            <Route path="/admin" component={requireAuthentication(AdminContainer)}>
+                <IndexRoute component={PostList}/>
+                <Route path=":slug/edit" component={PostEditor}/>
+            </Route>
             <Route path="/login" component={Login}/>
         </Router>
     );

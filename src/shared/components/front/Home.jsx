@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import * as postsActions from '../actions/posts';
+import * as postsActions from '../../actions/posts';
 import PostContent from './PostContent.jsx';
 import Pagination from './Pagination.jsx';
 
@@ -16,7 +16,6 @@ export class Home extends Component {
     render() {
         return(
             <div>
-                <h1>{this.props.blogName}</h1>
                 {this.props.posts.map((post, index) =>
                     <div key={index}>
                         <PostContent post={post} {...this.props} />
@@ -35,6 +34,7 @@ Home.propTypes = {
     pageSize: PropTypes.number.isRequired,
     offset: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
+    blogName: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
@@ -43,6 +43,7 @@ function mapStateToProps(state) {
         posts: state.posts.get('posts'),
         offset: state.posts.get('offset'),
         total: state.posts.get('total'),
+        blogName: state.blog.get('name')
     }
 }
 

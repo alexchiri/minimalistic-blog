@@ -3,22 +3,7 @@ import {Link} from 'react-router';
 import InlineCss from "react-inline-css";
 import moment from 'moment';
 
-export default class PostContent extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    getFormattedDate() {
-        return moment(this.props.post.get('date_published')).format("Do MMM YYYY, HH:mm");
-    }
-
-    getPostContent() {
-        return {__html: this.props.post.get('renderedContent')};
-    }
-
-    render() {
-        const {post} = this.props;
-        let postContentStyle = `
+export const postContentStyle = `
             & {
                 margin-top: 50px;
             }
@@ -73,6 +58,22 @@ export default class PostContent extends Component {
                 max-width: 100%
             }
         `;
+
+export default class PostContent extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    getFormattedDate() {
+        return moment(this.props.post.get('date_published')).format("Do MMM YYYY, HH:mm");
+    }
+
+    getPostContent() {
+        return {__html: this.props.post.get('renderedContent')};
+    }
+
+    render() {
+        const {post} = this.props;
 
         return (
             <InlineCss stylesheet={postContentStyle}>
