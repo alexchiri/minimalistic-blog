@@ -1,6 +1,6 @@
 import koaRouter from 'koa-router';
+import parse from 'co-body';
 import showdown from 'showdown';
-import mongoose from 'mongoose';
 import {Author, BlogPost} from '../storage/schemas';
 import jwt from 'jsonwebtoken';
 
@@ -22,16 +22,20 @@ function getPostContent(slug) {
     return function(done) {
         BlogPost.findOne({slug: slug})
             .lean()
-            .select("content -_id")
+            .select("content slug title link draft date_published date_updated -_id")
             .exec(function(err, posts) {
                 done(err, posts);
             });
     }
 }
 
-router.get('/:slug', function*(next) {
-    mongoose.connect(process.env.MONGODB);
+function updatePost(slug, postInfo) {
+    return function(done) {
+        BlogPost.update({slug: slug}, postInfo, done);
+    }
+}
 
+router.get('/:slug', function*(next) {
     let token = this.cookies.get('token');
 
     if(!token) {
@@ -49,19 +53,49 @@ router.get('/:slug', function*(next) {
 
     if(post) {
         post.renderedContent = new showdown.Converter().makeHtml(post.content);
-        delete post.content;
 
         this.body = {post: post};
     } else {
         this.throw(404, 'post not found');
     }
+});
 
-    mongoose.disconnect();
+router.put('/:slug', function*(next) {
+    let token = this.cookies.get('token');
+
+    if(!token) {
+        this.throw(401, 'Unauthorised');
+    }
+
+    try {
+        jwt.verify(token, process.env.SECRET_KEY);
+    } catch(err) {
+        this.throw(401, 'Unauthorised');
+    }
+
+    let slug = this.params.slug;
+    let postInfo = yield parse.json(this);
+
+    if(postInfo) {
+        let post = {
+            title: postInfo.title ? postInfo.title : null,
+            image: postInfo.image ? postInfo.image : null,
+            link: postInfo.link ? postInfo.link : null,
+            content: postInfo.content ? postInfo.content: null
+        };
+        let updateResult = yield updatePost(slug, post);
+
+        if(updateResult.ok == 1) {
+            this.status = 200;
+        } else {
+            this.throw(500, 'some error occurred');
+        }
+    } else {
+        this.throw(404, 'post not found');
+    }
 });
 
 router.get('/', function*(next) {
-    mongoose.connect(process.env.MONGODB);
-
     let token = this.cookies.get('token');
 
     if(!token) {
@@ -77,8 +111,6 @@ router.get('/', function*(next) {
     let postsInfo = yield getAllPostsInfo();
 
     this.body = { posts: postsInfo, total: postsInfo.length };
-
-    mongoose.disconnect();
 });
 
 export default router.middleware();

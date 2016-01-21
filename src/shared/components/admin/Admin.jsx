@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import {Link} from 'react-router';
 import InlineCss from "react-inline-css";
 import moment from 'moment';
-import AppBar from '../../../../node_modules/material-ui/lib/app-bar';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -16,22 +15,24 @@ export class Admin extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.posts.size == 0 && nextProps.posts.size > 0) {
+        let shouldRefresh = nextProps.location && nextProps.location.state && nextProps.location.state.refresh == true;
+
+        if((this.props.posts.size == 0 || shouldRefresh) && nextProps.posts.size > 0) {
+            nextProps.location.state = null;
             let post = nextProps.posts.get(0);
-            this.props.getAdminPostContent(post.get('slug'));
+            this.props.getAdminPost(post.get('slug'));
         }
     }
 
     render() {
         return(
             <div>
-                <AppBar
-                    title={this.props.blogName + " - Admin area"}
-                    showMenuIconButton={false}
-                />
-
                 {this.props.children && React.cloneElement(this.props.children, {
-                    posts: this.props.posts, post: this.props.post, getAdminPostContent: this.props.getAdminPostContent
+                    posts: this.props.posts,
+                    post: this.props.post,
+                    blogName: this.props.blogName,
+                    getAdminPost: this.props.getAdminPost,
+                    updateAdminPost: this.props.updateAdminPost
                 })}
             </div>
         );

@@ -23,6 +23,7 @@ export default (store, history) => {
             <Route path="/admin" component={requireAuthentication(AdminContainer)}>
                 <IndexRoute component={PostList}/>
                 <Route path=":slug/edit" component={PostEditor}/>
+                <Route path="add" component={PostEditor}/>
             </Route>
             <Route path="/login" component={Login}/>
         </Router>

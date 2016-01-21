@@ -16,6 +16,7 @@ import { createStore,
 import { apiMiddleware } from 'redux-api-middleware';
 import koaLogger from 'koa-logger';
 import {Map} from 'immutable';
+import mongoose from 'mongoose';
 
 import createRoutes from '../shared/routes';
 import rootReducer from '../shared/reducers/root';
@@ -40,6 +41,8 @@ const initialState = {
 };
 const store = applyMiddleware(thunk, apiMiddleware)(createStore)(rootReducer, initialState);
 const webserver = process.env.NODE_ENV === "production" ? "" : "//" + hostname + ":8080";
+
+mongoose.connect(process.env.MONGODB);
 
 app.use(serve("static", {defer: true}));
 

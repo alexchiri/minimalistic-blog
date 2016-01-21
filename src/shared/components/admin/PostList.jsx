@@ -2,6 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import DropDownMenu from '../../../../node_modules/material-ui/lib/DropDownMenu';
 import MenuItem from '../../../../node_modules/material-ui/lib/menus/menu-item';
 import RaisedButton from '../../../../node_modules/material-ui/lib/raised-button';
+import AppBar from '../../../../node_modules/material-ui/lib/app-bar';
+import FloatingActionButton from '../../../../node_modules/material-ui/lib/floating-action-button';
 
 import PostPreview from './PostPreview.jsx';
 
@@ -10,6 +12,8 @@ export default class PostList extends Component {
         super(props);
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleEditClick = this.handleEditClick.bind(this);
+        this.handleAddClick = this.handleAddClick.bind(this);
     }
 
     componentWillMount() {
@@ -29,7 +33,15 @@ export default class PostList extends Component {
     handleChange(e, index, value) {
         this.setState({value});
 
-        this.props.getAdminPostContent(value);
+        this.props.getAdminPost(value);
+    }
+
+    handleEditClick() {
+        this.context.router.push(`/admin/${this.state.value}/edit`);
+    }
+
+    handleAddClick() {
+
     }
 
     render() {
@@ -51,16 +63,25 @@ export default class PostList extends Component {
                                       style={{width:'70%'}}>
                             {items}
                         </DropDownMenu>
-                        <RaisedButton label="Edit"/>
+                        <RaisedButton label="Edit" onClick={this.handleEditClick}/>
                     </div>
                     <PostPreview post={postContent}/>
+                    <FloatingActionButton onClick={this.handleAddClick}><i className="material-icons">add</i></FloatingActionButton>
                 </div>;
         }
 
         return(
             <div>
+                <AppBar
+                    title={this.props.blogName + " - Admin area"}
+                    showMenuIconButton={false}
+                />
                 {content}
             </div>
         );
     }
 }
+
+PostList.contextTypes = {
+    router: React.PropTypes.object.isRequired
+};

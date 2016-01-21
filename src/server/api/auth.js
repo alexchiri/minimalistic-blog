@@ -1,6 +1,5 @@
 import koaRouter from 'koa-router';
 import parse from 'co-body';
-import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -17,8 +16,6 @@ function getAuthorByUsername(username) {
 }
 
 router.post('/', function*(next) {
-    mongoose.connect(process.env.MONGODB);
-
     var body = yield parse.json(this);
 
     if (!body.username && !body.password) this.throw(400, 'username and password are required!');
@@ -37,8 +34,6 @@ router.post('/', function*(next) {
 
     this.cookies.set("token", token);
     this.status = 200;
-
-    mongoose.disconnect();
 });
 
 export default router.middleware();

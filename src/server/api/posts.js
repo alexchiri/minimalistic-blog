@@ -1,6 +1,5 @@
 import koaRouter from 'koa-router';
 import showdown from 'showdown';
-import mongoose from 'mongoose';
 import {Author, BlogPost} from '../storage/schemas';
 import jwt from 'jsonwebtoken';
 
@@ -47,8 +46,6 @@ function getPostBySlug(slug) {
 }
 
 router.get('/', function*(next) {
-    mongoose.connect(process.env.MONGODB);
-
     let offset = parseInt(this.request.query.offset);
     if(isNaN(offset) || offset < 0) {
         offset = 0;
@@ -77,13 +74,9 @@ router.get('/', function*(next) {
     postsData.size = postsData.posts.length;
 
     this.body = postsData;
-
-    mongoose.disconnect();
 });
 
 router.get('/:slug', function*(next) {
-    mongoose.connect(process.env.MONGODB);
-
     let slug = this.params.slug;
     let post = yield getPostBySlug(slug);
 
@@ -95,8 +88,6 @@ router.get('/:slug', function*(next) {
     } else {
         this.throw(404, 'post not found');
     }
-
-    mongoose.disconnect();
 });
 
 export default router.middleware();
