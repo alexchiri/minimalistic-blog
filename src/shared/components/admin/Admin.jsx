@@ -15,12 +15,17 @@ export class Admin extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        let shouldRefresh = nextProps.location && nextProps.location.state && nextProps.location.state.refresh == true;
+        let refresh = nextProps.location && nextProps.location.state && nextProps.location.state.refresh ? nextProps.location.state.refresh : "no";
 
-        if((this.props.posts.size == 0 || shouldRefresh) && nextProps.posts.size > 0) {
-            nextProps.location.state = null;
-            let post = nextProps.posts.get(0);
-            this.props.getAdminPost(post.get('slug'));
+        if(refresh === 'all') {
+            nextProps.location.state.refresh = 'post';
+            this.props.getAdminPosts();
+        } else {
+            if((this.props.posts.size == 0 || refresh == 'post') && nextProps.posts.size > 0) {
+                nextProps.location.state = null;
+                let post = nextProps.posts.get(0);
+                this.props.getAdminPost(post.get('slug'));
+            }
         }
     }
 
@@ -32,7 +37,8 @@ export class Admin extends Component {
                     post: this.props.post,
                     blogName: this.props.blogName,
                     getAdminPost: this.props.getAdminPost,
-                    updateAdminPost: this.props.updateAdminPost
+                    updateAdminPost: this.props.updateAdminPost,
+                    addAdminPost: this.props.addAdminPost
                 })}
             </div>
         );

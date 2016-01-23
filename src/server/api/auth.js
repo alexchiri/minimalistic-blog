@@ -30,7 +30,7 @@ router.post('/', function*(next) {
         this.throw(401, 'Unauthorised');
     }
 
-    let token = jwt.sign({}, process.env.SECRET_KEY, { algorithm: 'HS256'});
+    let token = jwt.sign({author: author._id}, process.env.SECRET_KEY, { algorithm: 'HS256'});
 
     this.cookies.set("token", token);
     this.status = 200;

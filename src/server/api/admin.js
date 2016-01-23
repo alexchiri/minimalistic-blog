@@ -2,7 +2,9 @@ import koaRouter from 'koa-router';
 import parse from 'co-body';
 import showdown from 'showdown';
 import {Author, BlogPost} from '../storage/schemas';
+import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
+import getSlug from 'speakingurl';
 
 const router = koaRouter({prefix: '/api/admin/posts'});
 
@@ -35,18 +37,28 @@ function updatePost(slug, postInfo) {
     }
 }
 
-router.get('/:slug', function*(next) {
-    let token = this.cookies.get('token');
+function addPost(post) {
+    return function(done) {
+        BlogPost.create(post, done);
+    }
+}
 
+function authenticate(token) {
     if(!token) {
         this.throw(401, 'Unauthorised');
     }
 
     try {
-        jwt.verify(token, process.env.SECRET_KEY);
+        return jwt.verify(token, process.env.SECRET_KEY);
     } catch(err) {
         this.throw(401, 'Unauthorised');
     }
+}
+
+router.get('/:slug', function*(next) {
+    let token = this.cookies.get('token');
+
+    authenticate(token);
 
     let slug = this.params.slug;
     let post = yield getPostContent(slug);
@@ -63,15 +75,7 @@ router.get('/:slug', function*(next) {
 router.put('/:slug', function*(next) {
     let token = this.cookies.get('token');
 
-    if(!token) {
-        this.throw(401, 'Unauthorised');
-    }
-
-    try {
-        jwt.verify(token, process.env.SECRET_KEY);
-    } catch(err) {
-        this.throw(401, 'Unauthorised');
-    }
+    authenticate(token);
 
     let slug = this.params.slug;
     let postInfo = yield parse.json(this);
@@ -95,18 +99,38 @@ router.put('/:slug', function*(next) {
     }
 });
 
+router.post('/', function*(next) {
+    let token = this.cookies.get('token');
+
+    let authorData = authenticate(token);
+    if(!authorData.author) {
+        this.throw(500, 'Error');
+    }
+
+    let postInfo = yield parse.json(this);
+    if(postInfo.title) {
+        postInfo.slug = getSlug(postInfo.title);
+        postInfo.date_updated = Date.now();
+        postInfo.author = mongoose.Types.ObjectId(authorData.author);
+
+        if(!postInfo.draft) {
+            postInfo.date_published = Date.now();
+        }
+
+        let post = yield addPost(postInfo);
+
+        if(post._id) {
+            this.status = 200;
+        } else {
+            this.throw(500, 'Error');
+        }
+    }
+});
+
 router.get('/', function*(next) {
     let token = this.cookies.get('token');
 
-    if(!token) {
-        this.throw(401, 'Unauthorised');
-    }
-
-    try {
-        jwt.verify(token, process.env.SECRET_KEY);
-    } catch(err) {
-        this.throw(401, 'Unauthorised');
-    }
+    authenticate(token);
 
     let postsInfo = yield getAllPostsInfo();
 

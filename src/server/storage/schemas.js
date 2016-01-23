@@ -12,7 +12,8 @@ var BlogPostSchema = new Schema({
     content: String,
     image: String,
     date_published: Date,
-    date_updated: Date
+    date_updated: Date,
+    draft: Boolean
 });
 
 var AuthorSchema = new Schema({

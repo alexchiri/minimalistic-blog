@@ -8,6 +8,7 @@ import IconButton from '../../../../node_modules/material-ui/lib/icon-button';
 import NavigationClose from '../../../../node_modules/material-ui/lib/svg-icons/navigation/close';
 import FlatButton from '../../../../node_modules/material-ui/lib/flat-button';
 import merge from 'lodash.merge';
+import {Map} from 'immutable';
 
 export default class PostEditor extends Component {
     constructor(props) {
@@ -25,27 +26,36 @@ export default class PostEditor extends Component {
     }
 
     componentWillMount() {
-        let slug = this.props.params.slug;
+        let path = this.props.location.pathname;
 
-        if(this.props.post && this.props.post.get('slug') === slug) {
-            this.setState(this.extractStateFromProps(this.props))
-        } else {
-            this.props.getAdminPost(slug);
+        if(path) {
+            if(path.endsWith('edit')) {
+                let slug = this.props.params.slug;
+
+                if(this.props.post && this.props.post.get('slug') === slug) {
+                    this.setState(this.extractStateFromProps(this.props.post))
+                } else {
+                    this.props.getAdminPost(slug);
+                }
+            } else if(path.endsWith('add')) {
+                this.setState(this.extractStateFromProps(Map()))
+            }
         }
     }
 
     componentWillReceiveProps(nextProps) {
         if((!this.props.post || this.props.post.size == 0) && nextProps.post) {
-            this.setState(this.extractStateFromProps(nextProps))
+            this.setState(this.extractStateFromProps(nextProps.post))
         }
     }
 
-    extractStateFromProps(props) {
+    extractStateFromProps(post) {
         return {
-            content: props.post.get('content'),
-            title: props.post.get('title'),
-            link: props.post.get('link'),
-            image: props.post.get('image')
+            content: post.get('content'),
+            title: post.get('title'),
+            link: post.get('link'),
+            image: post.get('image'),
+            slug: post.get('slug')
         }
     }
 
@@ -66,17 +76,31 @@ export default class PostEditor extends Component {
     }
 
     handleSaveClick() {
-        if(this.props.post && this.props.post.size > 0) {
-            this.props.updateAdminPost(this.props.post.get('slug'), this.state);
-            this.context.router.push({pathname: '/admin', state: {refresh: true}});
+        let path = this.props.location.pathname;
+
+        if(path) {
+            if(path.endsWith('edit')) {
+                this.props.updateAdminPost(this.state);
+                this.context.router.push({pathname: '/admin', state: {refresh: 'post'}});
+            } else if(path.endsWith('add')) {
+                this.props.addAdminPost(merge(this.state, { draft: true }));
+                this.context.router.push({pathname: '/admin', state: {refresh: 'all'}});
+            }
         }
     }
 
     // same as save, but sets draft to false
     handlePublishClick() {
-        if(this.props.post && this.props.post.size > 0) {
-            this.props.updateAdminPost(this.props.post.get('slug'), merge(this.state, { draft: false }));
-            this.context.router.push({pathname: '/admin', state: {refresh: true}});
+        let path = this.props.location.pathname;
+
+        if(path) {
+            if(path.endsWith('edit')) {
+                this.props.updateAdminPost(merge(this.state, { draft: false }));
+                this.context.router.push({pathname: '/admin', state: {refresh: 'post'}});
+            } else if(path.endsWith('add')) {
+                this.props.addAdminPost(merge(this.state, { draft: false }));
+                this.context.router.push({pathname: '/admin', state: {refresh: 'all'}});
+            }
         }
     }
 
@@ -86,11 +110,12 @@ export default class PostEditor extends Component {
 
     render() {
         let content = <div>Loading...</div>;
+        let title = this.props.location.pathname && this.props.location.pathname.endsWith("edit") ? "Edit" : "Add";
         if(this.props.post && this.props.post.size > 0) {
             content =
                 <div>
                     <AppBar
-                        title={"Edit - " +  (this.state.title ? this.state.title : "Loading...")}
+                        title={title + " - " +  (this.state.title ? this.state.title : "")}
                         iconElementLeft={<IconButton onClick={this.handleCancelClick}><NavigationClose /></IconButton>}
                         iconElementRight={<FlatButton onClick={this.handleSaveClick} label="Save" />}
                         showMenuIconButton={true}

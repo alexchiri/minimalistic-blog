@@ -41,7 +41,7 @@ export default class PostList extends Component {
     }
 
     handleAddClick() {
-
+        this.context.router.push('/admin/add');
     }
 
     render() {

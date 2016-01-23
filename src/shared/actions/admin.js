@@ -12,6 +12,10 @@ export const ADMIN_UPDATE_POST_CONTENT_REQUEST = "ADMIN_UPDATE_POST_CONTENT_REQU
 export const ADMIN_UPDATE_POST_CONTENT_SUCCESS = "ADMIN_UPDATE_POST_CONTENT_SUCCESS";
 export const ADMIN_UPDATE_POST_CONTENT_FAILURE = "ADMIN_UPDATE_POST_CONTENT_FAILURE";
 
+export const ADMIN_ADD_POST_REQUEST = "ADMIN_ADD_POST_REQUEST";
+export const ADMIN_ADD_POST_SUCCESS = "ADMIN_ADD_POST_SUCCESS";
+export const ADMIN_ADD_POST_FAILURE = "ADMIN_ADD_POST_FAILURE";
+
 export function getAdminPosts() {
     return {
         [CALL_API]: {
@@ -34,16 +38,28 @@ export function getAdminPost(slug) {
     }
 }
 
-export function updateAdminPost(slug, postInfo) {
+export function updateAdminPost(postInfo) {
     return {
         [CALL_API]: {
-            endpoint: `/api/admin/posts/${slug}`,
+            endpoint: `/api/admin/posts/${postInfo.slug}`,
             method: 'PUT',
             body: JSON.stringify(postInfo),
             types: [{
                 type: ADMIN_UPDATE_POST_CONTENT_REQUEST,
                 meta: { post: postInfo }
             }, ADMIN_UPDATE_POST_CONTENT_SUCCESS, ADMIN_UPDATE_POST_CONTENT_FAILURE],
+            credentials: 'include'
+        }
+    }
+}
+
+export function addAdminPost(postInfo) {
+    return {
+        [CALL_API]: {
+            endpoint: '/api/admin/posts',
+            method: 'POST',
+            body: JSON.stringify(postInfo),
+            types: [ADMIN_ADD_POST_REQUEST, ADMIN_ADD_POST_SUCCESS, ADMIN_ADD_POST_FAILURE],
             credentials: 'include'
         }
     }
