@@ -90,6 +90,7 @@ app.use(function *(next) {
                 .replace( '${state}', state )
                 .replace( '${webserver}', webserver)
                 .replace( '${BLOG_TITLE}', process.env.BLOG_TITLE)
+                .replace( '${ANALYTICS_TRACKING_CODE}', process.env.ANALYTICS_TRACKING_CODE)
                 .replace( '${favicon}', process.env.FAVICON);
 
             callback(null);
