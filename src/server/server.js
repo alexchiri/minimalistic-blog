@@ -44,11 +44,12 @@ const webserver = process.env.NODE_ENV === "production" ? "" : "//" + hostname +
 
 mongoose.connect(process.env.MONGODB);
 
-app.use(serve("static", {defer: true}));
-
 if(process.env.NODE_ENV !== "production") {
+    app.proxy = true;
     app.use(koaLogger());
 }
+
+app.use(serve("static", {defer: true}));
 
 app.use(appRouter.routes());
 
