@@ -78,7 +78,7 @@ export default class PostContent extends Component {
         if (post.get('link')) {
             postLink =
                 <span>
-                <a href={post.get('link')}>{this.props.post.get('title')}</a>
+                <a href={post.get('link')}>{this.props.post.get('title')}</a>&nbsp;&nbsp;
                 <Link to={`/post/${post.get('slug')}`}><img src="/ac.png"/></Link>
                 </span>
         }
