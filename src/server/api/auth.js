@@ -32,7 +32,12 @@ router.post('/', function*(next) {
 
     let token = jwt.sign({author: author._id}, process.env.SECRET_KEY, { algorithm: 'HS256'});
 
-    this.cookies.set("token", token);
+    if(process.env.NODE_ENV === "production") {
+        this.cookies.set("token", token, {httpOnly: true, secure: true});
+    } else {
+        this.cookies.set("token", token);
+    }
+
     this.status = 200;
 });
 
