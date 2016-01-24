@@ -48,9 +48,17 @@ mongoose.connect(process.env.MONGODB);
 if(process.env.NODE_ENV !== "production") {
     app.use(koaLogger());
 } else {
+    // this assumes that this app will be used behind a proxy which has SSL enabled
     app.use(enforceHttps({
         trustProtoHeader: true
     }));
+
+    app.proxy = true;
+    // in order to allow secure cookies, we need to set the protocol on the node request object
+    app.use(function*(next) {
+        this.req.protocol = "https";
+        yield next;
+    });
 }
 
 app.use(serve("static", {defer: true}));
