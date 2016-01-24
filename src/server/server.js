@@ -17,6 +17,7 @@ import { apiMiddleware } from 'redux-api-middleware';
 import koaLogger from 'koa-logger';
 import {Map} from 'immutable';
 import mongoose from 'mongoose';
+import enforceHttps from 'koa-sslify';
 
 import createRoutes from '../shared/routes';
 import rootReducer from '../shared/reducers/root';
@@ -47,7 +48,9 @@ mongoose.connect(process.env.MONGODB);
 if(process.env.NODE_ENV !== "production") {
     app.use(koaLogger());
 } else {
-    app.proxy = true;
+    app.use(enforceHttps({
+        trustProtoHeader: true
+    }));
 }
 
 app.use(serve("static", {defer: true}));
