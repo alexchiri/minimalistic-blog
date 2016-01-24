@@ -45,8 +45,9 @@ const webserver = process.env.NODE_ENV === "production" ? "" : "//" + hostname +
 mongoose.connect(process.env.MONGODB);
 
 if(process.env.NODE_ENV !== "production") {
-    app.proxy = true;
     app.use(koaLogger());
+} else {
+    app.proxy = true;
 }
 
 app.use(serve("static", {defer: true}));
