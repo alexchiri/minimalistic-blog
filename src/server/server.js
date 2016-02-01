@@ -40,7 +40,7 @@ const initialState = {
         redirectAfterLogin: "/"
 })
 };
-const store = applyMiddleware(thunk, apiMiddleware)(createStore)(rootReducer, initialState);
+
 const webserver = process.env.NODE_ENV === "production" ? "" : "//" + hostname + ":8080";
 
 mongoose.connect(process.env.MONGODB);
@@ -77,6 +77,7 @@ app.use(function *(next) {
 
     let history = createMemoryHistory();
     const location = history.createLocation(this.path);
+    const store = applyMiddleware(thunk, apiMiddleware)(createStore)(rootReducer, initialState);
     let routes = createRoutes(store, history);
 
     yield ((callback) => {

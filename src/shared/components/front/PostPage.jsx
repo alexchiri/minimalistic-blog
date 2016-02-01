@@ -61,13 +61,13 @@ export class PostPage extends Component {
 
 PostPage.propTypes = {
     posts: PropTypes.object.isRequired,
-    isLoading: PropTypes.bool.isRequired,
+    isLoading: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
     return {
         posts: state.posts.get('posts'),
-        isLoading: state.posts.get('isLoading'),
+        isLoading: state.posts.get('isLoading')
     }
 }
 
