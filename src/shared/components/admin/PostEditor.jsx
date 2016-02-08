@@ -7,6 +7,7 @@ import AppBar from '../../../../node_modules/material-ui/lib/app-bar';
 import IconButton from '../../../../node_modules/material-ui/lib/icon-button';
 import NavigationClose from '../../../../node_modules/material-ui/lib/svg-icons/navigation/close';
 import FlatButton from '../../../../node_modules/material-ui/lib/flat-button';
+import Paper from '../../../../node_modules/material-ui/lib/paper';
 import merge from 'lodash.merge';
 import {Map} from 'immutable';
 
@@ -120,14 +121,27 @@ export default class PostEditor extends Component {
                         iconElementRight={<FlatButton onClick={this.handleSaveClick} label="Save" />}
                         showMenuIconButton={true}
                     />
-                    <TextField
-                        hintText="Title" ref="title" value={this.state.title} onChange={this.handleTitleChange}/><br/>
-                    <TextField
-                        hintText="Link" ref="link" value={this.state.link} onChange={this.handleLinkChange} /><br/>
-                    <TextField
-                        hintText="Image url" ref="image" value={this.state.image} onChange={this.handleImageChange} /><br/>
-                    <EnhancedTextarea value={this.state.content} onChange={this.handleContentChange}/>
-                    <FloatingActionButton onClick={this.handlePublishClick}><i className="material-icons">send</i></FloatingActionButton>
+                    <Paper style={{display: 'inline-block',
+                            position: "absolute",
+                            top: "75px",
+                            bottom: "10px",
+                            left: "10px",
+                            right: "10px",
+                            overflow: "scroll",
+                            padding: "10px"}}
+                        zDepth={1}>
+                        <TextField
+                            hintText="Title" ref="title" value={this.state.title} onChange={this.handleTitleChange}/><br/>
+                        <TextField
+                            hintText="Link" ref="link" value={this.state.link} onChange={this.handleLinkChange} /><br/>
+                        <TextField
+                            hintText="Image url" ref="image" value={this.state.image} onChange={this.handleImageChange} /><br/>
+                        <EnhancedTextarea value={this.state.content} onChange={this.handleContentChange}/>
+                    </Paper>
+
+                    <FloatingActionButton onClick={this.handlePublishClick} style={{position:"absolute", bottom: "30px", right:"30px"}}>
+                        <i className="material-icons">send</i>
+                    </FloatingActionButton>
                 </div>
         }
 
