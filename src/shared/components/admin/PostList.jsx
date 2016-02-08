@@ -35,10 +35,7 @@ export default class PostList extends Component {
     }
 
     handleChange(e, index) {
-        console.log("e", e);
         this.setState({ selectedIndex: index });
-        console.log("index ", index);
-        console.log("this.props.posts.get(index)", this.props.posts.get(index));
 
         this.props.getAdminPost(this.props.posts.get(index).get('slug'));
     }
