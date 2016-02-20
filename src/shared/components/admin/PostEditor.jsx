@@ -131,11 +131,11 @@ export default class PostEditor extends Component {
                             padding: "10px"}}
                         zDepth={1}>
                         <TextField
-                            hintText="Title" ref="title" value={this.state.title} onChange={this.handleTitleChange}/><br/>
+                            hintText="Title" ref="title" value={this.state.title} onChange={this.handleTitleChange} style={{width: "100%"}}/><br/>
                         <TextField
-                            hintText="Link" ref="link" value={this.state.link} onChange={this.handleLinkChange} /><br/>
+                            hintText="Link" ref="link" value={this.state.link} onChange={this.handleLinkChange} style={{width: "100%"}} /><br/>
                         <TextField
-                            hintText="Image url" ref="image" value={this.state.image} onChange={this.handleImageChange} /><br/>
+                            hintText="Image url" ref="image" value={this.state.image} onChange={this.handleImageChange} style={{width: "100%"}} /><br/>
                         <EnhancedTextarea value={this.state.content} onChange={this.handleContentChange}/>
                     </Paper>
 
