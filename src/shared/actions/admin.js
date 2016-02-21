@@ -1,4 +1,4 @@
-import { CALL_API } from 'redux-api-middleware';
+import { RSAA } from 'redux-api-middleware';
 
 export const ADMIN_GET_POSTS_REQUEST = "ADMIN_GET_POSTS_REQUEST";
 export const ADMIN_GET_POSTS_SUCCESS = "ADMIN_GET_POSTS_SUCCESS";
@@ -18,7 +18,7 @@ export const ADMIN_ADD_POST_FAILURE = "ADMIN_ADD_POST_FAILURE";
 
 export function getAdminPosts() {
     return {
-        [CALL_API]: {
+        [RSAA]: {
             endpoint: '/api/admin/posts',
             method: 'GET',
             types: [ADMIN_GET_POSTS_REQUEST, ADMIN_GET_POSTS_SUCCESS, ADMIN_GET_POSTS_FAILURE],
@@ -29,7 +29,7 @@ export function getAdminPosts() {
 
 export function getAdminPost(slug) {
     return {
-        [CALL_API]: {
+        [RSAA]: {
             endpoint: `/api/admin/posts/${slug}`,
             method: 'GET',
             types: [ADMIN_GET_POST_CONTENT_REQUEST, ADMIN_GET_POST_CONTENT_SUCCESS, ADMIN_GET_POST_CONTENT_FAILURE],
@@ -40,7 +40,7 @@ export function getAdminPost(slug) {
 
 export function updateAdminPost(postInfo) {
     return {
-        [CALL_API]: {
+        [RSAA]: {
             endpoint: `/api/admin/posts/${postInfo.slug}`,
             method: 'PUT',
             body: JSON.stringify(postInfo),
@@ -55,7 +55,7 @@ export function updateAdminPost(postInfo) {
 
 export function addAdminPost(postInfo) {
     return {
-        [CALL_API]: {
+        [RSAA]: {
             endpoint: '/api/admin/posts',
             method: 'POST',
             body: JSON.stringify(postInfo),

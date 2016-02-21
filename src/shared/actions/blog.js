@@ -1,4 +1,4 @@
-import { CALL_API, getJSON } from 'redux-api-middleware';
+import { RSAA, getJSON } from 'redux-api-middleware';
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
@@ -6,7 +6,7 @@ export const LOGIN_FAILURE = "LOGIN_FAILURE";
 
 export function login(username, password, redirectAfterLogin) {
     return {
-        [CALL_API]: {
+        [RSAA]: {
             endpoint: '/api/login',
             method: 'POST',
             body: JSON.stringify({username: username, password: password}),
