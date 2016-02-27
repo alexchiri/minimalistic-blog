@@ -15,8 +15,6 @@ export default class PostEditor extends Component {
     constructor(props) {
         super(props);
 
-        //this.state = {};
-
         this.handleContentChange = this.handleContentChange.bind(this);
         this.handleTitleChange = this.handleTitleChange.bind(this);
         this.handleLinkChange = this.handleLinkChange.bind(this);
@@ -112,7 +110,7 @@ export default class PostEditor extends Component {
     render() {
         let content = <div>Loading...</div>;
         let title = this.props.location.pathname && this.props.location.pathname.endsWith("edit") ? "Edit" : "Add";
-        if(this.props.post && this.props.post.size > 0) {
+        if(this.state) {
             content =
                 <div>
                     <AppBar

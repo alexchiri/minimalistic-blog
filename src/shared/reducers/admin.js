@@ -27,8 +27,9 @@ export default function reducer(state = initialState, action = {}) {
         case ADMIN_UPDATE_POST_CONTENT_REQUEST:
             newState = state.mergeDeep(Map({
                 didFail: false,
-                post: Map(action.meta.post),
-                posts: List.of(Map({title: action.meta.post.title}))
+                post: Map(action.meta.post)
+                // TODO: update title in the posts collection for the current post
+                // posts: List.of(Map({slug: action.meta.post.slug, title: action.meta.post.title}))
             }));
             return newState;
         case ADMIN_UPDATE_POST_CONTENT_SUCCESS:

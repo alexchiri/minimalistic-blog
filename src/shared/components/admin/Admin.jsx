@@ -1,7 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import {Link} from 'react-router';
-import InlineCss from "react-inline-css";
-import moment from 'moment';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -17,12 +14,14 @@ export class Admin extends Component {
     componentWillReceiveProps(nextProps) {
         let refresh = nextProps.location && nextProps.location.state && nextProps.location.state.refresh ? nextProps.location.state.refresh : "no";
 
+        // TODO: reevaluate these ifs to make sure they make sense
         if(refresh === 'all') {
             nextProps.location.state.refresh = 'post';
             this.props.getAdminPosts();
         } else {
-            if((this.props.posts.size == 0 || refresh == 'post') && nextProps.posts.size > 0) {
+            if(refresh == 'post') {
                 nextProps.location.state = null;
+            } else if(this.props.posts.size == 0 && nextProps.posts.size > 0) {
                 let post = nextProps.posts.get(0);
                 this.props.getAdminPost(post.get('slug'));
             }

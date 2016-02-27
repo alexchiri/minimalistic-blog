@@ -8,6 +8,7 @@ import AdminContainer from '../shared/components/admin/Admin.jsx';
 import Login from '../shared/components/auth/Login.jsx';
 import PostEditor from '../shared/components/admin/PostEditor.jsx';
 import PostList from '../shared/components/admin/PostList.jsx';
+import MenuEditor from '../shared/components/admin/MenuEditor.jsx';
 import requireAuthentication from '../shared/components/auth/AuthenticatedComponent.jsx';
 
 export default (store, history) => {
@@ -24,6 +25,7 @@ export default (store, history) => {
                 <IndexRoute component={PostList}/>
                 <Route path=":slug/edit" component={PostEditor}/>
                 <Route path="add" component={PostEditor}/>
+                <Route path="menu" component={MenuEditor}/>
             </Route>
             <Route path="/login" component={Login}/>
         </Router>
