@@ -54,7 +54,7 @@ function mapStateToProps(state) {
     return {
         blogName: state.blog.get('name'),
         posts: state.admin.get('posts'),
-        post: state.admin.get('post'),
+        post: state.admin.get('post')
     }
 }
 

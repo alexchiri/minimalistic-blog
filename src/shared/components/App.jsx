@@ -79,7 +79,7 @@ export class App extends Component {
                         <a href="/">{this.props.blogName}</a>
                     </h1>
 
-                    { this.props.menus && this.props.menus.length > 0 ? navigation : ''}
+                    { this.props.menus && this.props.menus.size > 0 ? navigation : ''}
 
                     <div>
                         {this.props.children}
