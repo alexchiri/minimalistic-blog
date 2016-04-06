@@ -90,6 +90,13 @@ export default class PostContent extends Component {
                     <div
                         className="postSubtitle">{post.get('author').get('first_name') + " " + post.get('author').get('last_name')}
                         | { this.getFormattedDate() }</div>
+
+                    { (() => {
+                        if (post.get('image')) {
+                            return <img src={post.get('image')}/>;
+                        }
+                    })()}
+
                     <div className="postContent" dangerouslySetInnerHTML={this.getPostContent()}>
                     </div>
                 </div>
