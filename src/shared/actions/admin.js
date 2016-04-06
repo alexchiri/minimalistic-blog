@@ -16,6 +16,16 @@ export const ADMIN_ADD_POST_REQUEST = "ADMIN_ADD_POST_REQUEST";
 export const ADMIN_ADD_POST_SUCCESS = "ADMIN_ADD_POST_SUCCESS";
 export const ADMIN_ADD_POST_FAILURE = "ADMIN_ADD_POST_FAILURE";
 
+export const ADMIN_GET_MENU_ITEMS_REQUEST = "ADMIN_GET_MENU_ITEMS_REQUEST";
+export const ADMIN_GET_MENU_ITEMS_SUCCESS = "ADMIN_GET_MENU_ITEMS_SUCCESS";
+export const ADMIN_GET_MENU_ITEMS_FAILURE = "ADMIN_GET_MENU_ITEMS_FAILURE";
+
+export const ADMIN_SAVE_MENU_ITEMS_REQUEST = "ADMIN_SAVE_MENU_ITEMS_REQUEST";
+export const ADMIN_SAVE_MENU_ITEMS_SUCCESS = "ADMIN_SAVE_MENU_ITEMS_SUCCESS";
+export const ADMIN_SAVE_MENU_ITEMS_FAILURE = "ADMIN_SAVE_MENU_ITEMS_FAILURE";
+
+/** POSTS */
+
 export function getAdminPosts() {
     return {
         [CALL_API]: {
@@ -60,6 +70,31 @@ export function addAdminPost(postInfo) {
             method: 'POST',
             body: JSON.stringify(postInfo),
             types: [ADMIN_ADD_POST_REQUEST, ADMIN_ADD_POST_SUCCESS, ADMIN_ADD_POST_FAILURE],
+            credentials: 'include'
+        }
+    }
+}
+
+/** MENU ITEMS */
+
+export function getMenuItems() {
+    return {
+        [CALL_API]: {
+            endpoint: `/api/admin/menus`,
+            method: 'GET',
+            types: [ADMIN_GET_MENU_ITEMS_REQUEST, ADMIN_GET_MENU_ITEMS_SUCCESS, ADMIN_GET_MENU_ITEMS_FAILURE],
+            credentials: 'include'
+        }
+    }
+}
+
+export function saveMenuItems(menus) {
+    return {
+        [CALL_API]: {
+            endpoint: `/api/admin/menus`,
+            method: 'POST',
+            body: JSON.stringify(menus),
+            types: [ADMIN_SAVE_MENU_ITEMS_REQUEST, ADMIN_SAVE_MENU_ITEMS_SUCCESS, ADMIN_SAVE_MENU_ITEMS_FAILURE],
             credentials: 'include'
         }
     }

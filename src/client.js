@@ -10,7 +10,7 @@ import { apiMiddleware } from 'redux-api-middleware';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import { createStore,
-    combineReducers,
+    compose,
     applyMiddleware }  from 'redux';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -34,7 +34,20 @@ if (window.$REDUX_STATE) {
 }
 
 const logger = createLogger();
-const createStoreWithMiddleware = applyMiddleware(thunk, apiMiddleware, logger)(createStore);
+
+let createStoreWithMiddleware = applyMiddleware(
+    thunk,
+    apiMiddleware,
+    logger
+)(createStore);
+
+if(process.env.NODE_ENV !== "production") {
+    createStoreWithMiddleware = compose(applyMiddleware(thunk,
+        apiMiddleware,
+        logger),
+        typeof window === 'object' && typeof window.devToolsExtension !== 'undefined' ? window.devToolsExtension() : f => f
+    )(createStore);
+}
 const store = createStoreWithMiddleware(rootReducer, state);
 
 /**

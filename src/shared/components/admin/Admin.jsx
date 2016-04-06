@@ -48,8 +48,6 @@ Admin.propTypes = {
     blogName: PropTypes.string.isRequired,
     posts: PropTypes.object.isRequired,
     post: PropTypes.object.isRequired,
-    isLoadingList: PropTypes.bool.isRequired,
-    isLoadingPost: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
@@ -57,8 +55,6 @@ function mapStateToProps(state) {
         blogName: state.blog.get('name'),
         posts: state.admin.get('posts'),
         post: state.admin.get('post'),
-        isLoadingList: state.admin.get('isLoadingList'),
-        isLoadingPost: state.admin.get('isLoadingPost')
     }
 }
 

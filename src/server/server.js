@@ -15,7 +15,7 @@ import { createStore,
     applyMiddleware }  from 'redux';
 import { apiMiddleware } from 'redux-api-middleware';
 import koaLogger from 'koa-logger';
-import {Map} from 'immutable';
+import {Map, List, fromJS} from 'immutable';
 import mongoose from 'mongoose';
 import enforceHttps from 'koa-sslify';
 
@@ -23,7 +23,8 @@ import createRoutes from '../shared/routes';
 import rootReducer from '../shared/reducers/root';
 import posts from './api/posts';
 import auth from './api/auth';
-import admin from './api/admin';
+import adminPosts from './api/admin/posts';
+import adminMenus, {getMenuItems} from './api/admin/menus';
 
 const app       = koa();
 const appRouter = koaRouter();
@@ -31,15 +32,6 @@ const hostname  = process.env.HOSTNAME || "localhost";
 const port      = process.env.PORT || 8000;
 
 const index = fs.readFileSync(path.resolve(__dirname, '../index.html'), {encoding: 'utf-8'} );
-const initialState = {
-    blog: Map({
-        name: process.env.BLOG_TITLE,
-        pageSize: parseInt(process.env.POSTS_PAGE_SIZE),
-        isAuthenticating: false,
-        isAuthenticated: false,
-        redirectAfterLogin: "/"
-})
-};
 
 const webserver = process.env.NODE_ENV === "production" ? "" : "//" + hostname + ":8080";
 
@@ -66,13 +58,26 @@ app.use(serve("static", {defer: true}));
 app.use(appRouter.routes());
 
 app.use(posts);
-app.use(admin);
+app.use(adminPosts);
+app.use(adminMenus);
 app.use(auth);
 
 app.use(function *(next) {
     // required by the material-ui lib
     GLOBAL.navigator = {
         userAgent: this.request.headers['user-agent']
+    };
+
+    let menuItems = yield getMenuItems();
+    const initialState = {
+        blog: Map({
+            name: process.env.BLOG_TITLE,
+            pageSize: parseInt(process.env.POSTS_PAGE_SIZE),
+            isAuthenticating: false,
+            isAuthenticated: false,
+            redirectAfterLogin: "/",
+            menus: fromJS(menuItems)
+        })
     };
 
     let history = createMemoryHistory();

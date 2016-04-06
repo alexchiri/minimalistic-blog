@@ -1,10 +1,12 @@
 import koaRouter from 'koa-router';
 import parse from 'co-body';
 import showdown from 'showdown';
-import {Author, BlogPost} from '../storage/schemas';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import getSlug from 'speakingurl';
+
+import {Author, BlogPost} from '../../storage/schemas';
+import {authenticate} from '../auth';
 
 const router = koaRouter({prefix: '/api/admin/posts'});
 
@@ -40,18 +42,6 @@ function updatePost(slug, postInfo) {
 function addPost(post) {
     return function(done) {
         BlogPost.create(post, done);
-    }
-}
-
-function authenticate(token) {
-    if(!token) {
-        this.throw(401, 'Unauthorised');
-    }
-
-    try {
-        return jwt.verify(token, process.env.SECRET_KEY);
-    } catch(err) {
-        this.throw(401, 'Unauthorised');
     }
 }
 

@@ -80,7 +80,7 @@ export default class PostList extends Component {
                                     bottom: "10px",
                                     left: "10px",
                                     right: "0",
-                                    overflow: "scroll"}}
+                                    overflow: "auto"}}
                            zDepth={1}>
                         <SelectableList
                             subheader="Posts"

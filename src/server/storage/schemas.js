@@ -16,6 +16,13 @@ var BlogPostSchema = new Schema({
     draft: Boolean
 });
 
+var MenuItemSchema = new Schema({
+    label: String,
+    url: String,
+    type: String,
+    index: Number
+});
+
 var AuthorSchema = new Schema({
     username: String,
     password: String,
@@ -30,3 +37,4 @@ BlogPostSchema.plugin(mongoosePaginate);
 
 export const Author = mongoose.model('Author', AuthorSchema);
 export const BlogPost = mongoose.model('BlogPost', BlogPostSchema);
+export const MenuItem = mongoose.model('MenuItem', MenuItemSchema);

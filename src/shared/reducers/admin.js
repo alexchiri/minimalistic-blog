@@ -1,29 +1,23 @@
-import {ADMIN_GET_POSTS_REQUEST, ADMIN_GET_POSTS_SUCCESS, ADMIN_GET_POSTS_FAILURE,
-         ADMIN_GET_POST_CONTENT_REQUEST, ADMIN_GET_POST_CONTENT_SUCCESS, ADMIN_GET_POST_CONTENT_FAILURE,
-         ADMIN_UPDATE_POST_CONTENT_REQUEST, ADMIN_UPDATE_POST_CONTENT_SUCCESS, ADMIN_UPDATE_POST_CONTENT_FAILURE} from '../actions/admin';
+import {
+    ADMIN_GET_POSTS_REQUEST, ADMIN_GET_POSTS_SUCCESS, ADMIN_GET_POSTS_FAILURE,
+    ADMIN_GET_POST_CONTENT_REQUEST, ADMIN_GET_POST_CONTENT_SUCCESS, ADMIN_GET_POST_CONTENT_FAILURE,
+    ADMIN_UPDATE_POST_CONTENT_REQUEST, ADMIN_UPDATE_POST_CONTENT_SUCCESS, ADMIN_UPDATE_POST_CONTENT_FAILURE,
+    ADMIN_GET_MENU_ITEMS_REQUEST, ADMIN_GET_MENU_ITEMS_SUCCESS, ADMIN_GET_MENU_ITEMS_FAILURE,
+    ADMIN_SAVE_MENU_ITEMS_REQUEST, ADMIN_SAVE_MENU_ITEMS_SUCCESS, ADMIN_SAVE_MENU_ITEMS_FAILURE
+} from '../actions/admin';
 import {Map, List, fromJS} from 'immutable';
 
-const initialState = Map({ posts: List(), post: Map({}), total: 0, isLoadingList: false, isLoadingPost: false, didFail: false });
+const initialState = Map({ posts: List(), post: Map({}), menus: List(), total: 0, requestResult: { bla: 0 }});
 
 export default function reducer(state = initialState, action = {}) {
     let newState;
     switch (action.type) {
-        case ADMIN_GET_POSTS_REQUEST:
-            newState = state.mergeDeep(Map({ isLoadingList: true, isLoadingPost: true, didFail: false }));
-            return newState;
         case ADMIN_GET_POSTS_SUCCESS:
-            newState = state.mergeDeep(fromJS(action.payload).merge(Map({ isLoadingList: false, didFail: false })));
-            return newState;
-        case ADMIN_GET_POSTS_FAILURE:
-            return state.mergeDeep(Map({ isLoadingList: false, didFail: true }));
+            return state.mergeDeep(fromJS(action.payload));
         case ADMIN_GET_POST_CONTENT_REQUEST:
-            newState = state.mergeDeep(Map({ isLoadingPost: true, didFail: false, post: Map({})}));
-            return newState;
+            return state.mergeDeep(Map({ post: Map({})}));
         case ADMIN_GET_POST_CONTENT_SUCCESS:
-            newState = state.mergeDeep(fromJS(action.payload).merge(Map({ isLoadingPost: false, didFail: false })));
-            return newState;
-        case ADMIN_GET_POST_CONTENT_FAILURE:
-            return state.mergeDeep(Map({ isLoadingPost: false, didFail: true }));
+            return state.mergeDeep(fromJS(action.payload));
         case ADMIN_UPDATE_POST_CONTENT_REQUEST:
             newState = state.mergeDeep(Map({
                 didFail: false,
@@ -32,11 +26,8 @@ export default function reducer(state = initialState, action = {}) {
                 // posts: List.of(Map({slug: action.meta.post.slug, title: action.meta.post.title}))
             }));
             return newState;
-        case ADMIN_UPDATE_POST_CONTENT_SUCCESS:
-            newState = state.merge(Map({ didFail: false }));
-            return newState;
-        case ADMIN_UPDATE_POST_CONTENT_FAILURE:
-            return state.merge(Map({ didFail: true }));
+        case ADMIN_GET_MENU_ITEMS_SUCCESS:
+            return state.merge(fromJS(action.payload));
         default:
             return state;
     }

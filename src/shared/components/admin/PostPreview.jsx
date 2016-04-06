@@ -24,7 +24,7 @@ export default class PostPreview extends Component {
                             bottom: "10px",
                             paddingLeft: "30px",
                             paddingRight: "30px",
-                            overflow: "scroll"}}
+                            overflow: "auto"}}
                        zDepth={1}>
                     <InlineCss stylesheet={postContentStyle}>
                         <div className="postContent" dangerouslySetInnerHTML={this.getPostContent()}>

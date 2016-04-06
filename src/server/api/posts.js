@@ -1,7 +1,6 @@
 import koaRouter from 'koa-router';
 import showdown from 'showdown';
 import {Author, BlogPost} from '../storage/schemas';
-import jwt from 'jsonwebtoken';
 
 const router = koaRouter({prefix: '/api/posts'});
 const POSTS_PAGE_SIZE = parseInt(process.env.POSTS_PAGE_SIZE);

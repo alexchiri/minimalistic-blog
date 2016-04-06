@@ -15,6 +15,18 @@ function getAuthorByUsername(username) {
     }
 }
 
+export function authenticate(token) {
+    if(!token) {
+        this.throw(401, 'Unauthorised');
+    }
+
+    try {
+        return jwt.verify(token, process.env.SECRET_KEY);
+    } catch(err) {
+        this.throw(401, 'Unauthorised');
+    }
+}
+
 router.post('/', function*(next) {
     var body = yield parse.json(this);
 

@@ -125,7 +125,7 @@ export default class PostEditor extends Component {
                             bottom: "10px",
                             left: "10px",
                             right: "10px",
-                            overflow: "scroll",
+                            overflow: "auto",
                             padding: "10px"}}
                         zDepth={1}>
                         <TextField
