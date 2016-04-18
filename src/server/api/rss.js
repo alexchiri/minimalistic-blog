@@ -27,6 +27,7 @@ router.get('/', function*(next) {
     rss.att("xmlns:dc", "http://purl.org/dc/elements/1.1/");
     rss.att("xmlns:atom", "http://www.w3.org/2005/Atom");
     rss.att("xmlns:media", "http://search.yahoo.com/mrss/");
+    rss.att("xmlns:content", "http://purl.org/rss/1.0/modules/content/");
     rss.att("version", "2.0");
 
     let channel = rss.ele('channel');
