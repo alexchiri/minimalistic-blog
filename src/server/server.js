@@ -23,6 +23,7 @@ import createRoutes from '../shared/routes';
 import rootReducer from '../shared/reducers/root';
 import posts from './api/posts';
 import auth from './api/auth';
+import rss from './api/rss';
 import adminPosts from './api/admin/posts';
 import adminMenus, {getMenuItems} from './api/admin/menus';
 
@@ -61,6 +62,7 @@ app.use(posts);
 app.use(adminPosts);
 app.use(adminMenus);
 app.use(auth);
+app.use(rss);
 
 app.use(function *(next) {
     // required by the material-ui lib
