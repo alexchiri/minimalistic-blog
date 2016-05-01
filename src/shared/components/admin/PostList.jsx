@@ -4,7 +4,7 @@ import ListItem from '../../../../node_modules/material-ui/lib/lists/list-item';
 import FloatingActionButton from '../../../../node_modules/material-ui/lib/floating-action-button';
 import FlatButton from '../../../../node_modules/material-ui/lib/flat-button';
 import Paper from '../../../../node_modules/material-ui/lib/paper';
-import Subheader from '../../../../node_modules/material-ui/lib/subheader/subheader';
+import Subheader from '../../../../node_modules/material-ui/lib/Subheader/Subheader';
 import { SelectableContainerEnhance } from '../../../../node_modules/material-ui/lib/hoc/selectable-enhance';
 import merge from 'lodash.merge';
 let SelectableList = SelectableContainerEnhance(List);
