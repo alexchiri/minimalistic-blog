@@ -4,6 +4,7 @@ import ListItem from '../../../../node_modules/material-ui/lib/lists/list-item';
 import FloatingActionButton from '../../../../node_modules/material-ui/lib/floating-action-button';
 import FlatButton from '../../../../node_modules/material-ui/lib/flat-button';
 import Paper from '../../../../node_modules/material-ui/lib/paper';
+import Subheader from '../../../../node_modules/material-ui/lib/subheader/subheader';
 import { SelectableContainerEnhance } from '../../../../node_modules/material-ui/lib/hoc/selectable-enhance';
 import merge from 'lodash.merge';
 let SelectableList = SelectableContainerEnhance(List);
@@ -79,13 +80,13 @@ export default class PostList extends Component {
                                     top: "75px",
                                     bottom: "10px",
                                     left: "10px",
-                                    right: "0",
+                                    right: "0px",
                                     overflow: "auto"}}
                            zDepth={1}>
                         <SelectableList
-                            subheader="Posts"
                             valueLink={{value: this.state.selectedIndex, requestChange: this.handleChange}}>
                             {items}
+                            <Subheader>Posts</Subheader>
                         </SelectableList>
                     </Paper>
                     <PostPreview post={postContent}/>

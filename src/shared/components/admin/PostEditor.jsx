@@ -50,11 +50,11 @@ export default class PostEditor extends Component {
 
     extractStateFromProps(post) {
         return {
-            content: post.get('content'),
-            title: post.get('title'),
-            link: post.get('link'),
-            image: post.get('image'),
-            slug: post.get('slug')
+            content: post.get('content') ? post.get('content') : '',
+            title: post.get('title') ? post.get('title') : '',
+            link: post.get('link') ? post.get('link') : '',
+            image: post.get('image') ? post.get('image') : '',
+            slug: post.get('slug') ? post.get('slug') : ''
         }
     }
 
