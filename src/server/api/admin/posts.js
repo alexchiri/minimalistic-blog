@@ -26,7 +26,7 @@ function getPostContent(slug) {
     return function(done) {
         BlogPost.findOne({slug: slug})
             .lean()
-            .select("content slug title link draft date_published date_updated -_id")
+            .select("content slug title link image draft date_published date_updated -_id")
             .exec(function(err, posts) {
                 done(err, posts);
             });

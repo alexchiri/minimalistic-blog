@@ -1,5 +1,7 @@
 import React from 'react';
 import {Router, IndexRoute, Route} from 'react-router';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import App from '../shared/components/App.jsx';
 import HomeContainer from '../shared/components/front/Home.jsx';
@@ -13,21 +15,23 @@ import requireAuthentication from '../shared/components/auth/AuthenticatedCompon
 
 export default (store, history) => {
     return (
-        <Router history={history}>
-            <Route path="/" component={App}>
-                { /* Home (main) route */ }
-                <IndexRoute component={HomeContainer}/>
-                <Route path="post/:slug" component={PostPage}/>
-                { /* <Route path="*" component={NotFound} status={404} /> */ }
-            </Route>
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
+            <Router history={history}>
+                <Route path="/" component={App}>
+                       { /* Home (main) route */ }
+                           <IndexRoute component={HomeContainer}/>
+                           <Route path="post/:slug" component={PostPage}/>
+                       { /* <Route path="*" component={NotFound} status={404} /> */ }
+                </Route>
 
-            <Route path="/admin" component={requireAuthentication(AdminContainer)}>
-                <IndexRoute component={PostList}/>
-                <Route path=":slug/edit" component={PostEditor}/>
-                <Route path="add" component={PostEditor}/>
-                <Route path="menu" component={MenuEditor}/>
-            </Route>
-            <Route path="/login" component={Login}/>
-        </Router>
+                <Route path="/admin" component={requireAuthentication(AdminContainer)}>
+                    <IndexRoute component={PostList}/>
+                    <Route path=":slug/edit" component={PostEditor}/>
+                    <Route path="add" component={PostEditor}/>
+                    <Route path="menu" component={MenuEditor}/>
+                </Route>
+                <Route path="/login" component={Login}/>
+            </Router>
+        </MuiThemeProvider>
     );
 };

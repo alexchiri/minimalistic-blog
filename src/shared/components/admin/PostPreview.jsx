@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import { postContentStyle } from '../front/PostContent.jsx';
-import Paper from '../../../../node_modules/material-ui/lib/paper';
+import Paper from '../../../../node_modules/material-ui/Paper';
 import InlineCss from "react-inline-css";
 
 export default class PostPreview extends Component {

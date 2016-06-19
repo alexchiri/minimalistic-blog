@@ -1,13 +1,13 @@
 import React, {Component, PropTypes} from 'react';
-import List from '../../../../node_modules/material-ui/lib/lists/list';
-import ListItem from '../../../../node_modules/material-ui/lib/lists/list-item';
-import FloatingActionButton from '../../../../node_modules/material-ui/lib/floating-action-button';
-import FlatButton from '../../../../node_modules/material-ui/lib/flat-button';
-import Paper from '../../../../node_modules/material-ui/lib/paper';
-import Subheader from '../../../../node_modules/material-ui/lib/Subheader/Subheader';
-import { SelectableContainerEnhance } from '../../../../node_modules/material-ui/lib/hoc/selectable-enhance';
+import List from '../../../../node_modules/material-ui/List';
+import ListItem from '../../../../node_modules/material-ui/List/ListItem';
+import FloatingActionButton from '../../../../node_modules/material-ui/FloatingActionButton';
+import FlatButton from '../../../../node_modules/material-ui/FlatButton';
+import Paper from '../../../../node_modules/material-ui/Paper';
+import Subheader from '../../../../node_modules/material-ui/Subheader';
+import MakeSelectable from '../../../../node_modules/material-ui/List/MakeSelectable';
 import merge from 'lodash.merge';
-let SelectableList = SelectableContainerEnhance(List);
+let SelectableList = MakeSelectable(List);
 
 import PostPreview from './PostPreview.jsx';
 import AppBarWithMenu from './AppBarWithMenu.jsx';
@@ -83,8 +83,7 @@ export default class PostList extends Component {
                                     right: "0px",
                                     overflow: "auto"}}
                            zDepth={1}>
-                        <SelectableList
-                            valueLink={{value: this.state.selectedIndex, requestChange: this.handleChange}}>
+                        <SelectableList value={this.state.selectedIndex} onChange={this.handleChange}>
                             {items}
                             <Subheader>Posts</Subheader>
                         </SelectableList>

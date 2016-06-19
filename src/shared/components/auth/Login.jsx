@@ -2,8 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import InlineCss from "react-inline-css";
-import TextField from '../../../../node_modules/material-ui/lib/text-field';
-import RaisedButton from '../../../../node_modules/material-ui/lib/raised-button';
+import TextField from '../../../../node_modules/material-ui/TextField';
+import RaisedButton from '../../../../node_modules/material-ui/RaisedButton';
 
 import * as blogActions from '../../actions/blog';
 

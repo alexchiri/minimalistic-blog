@@ -1,9 +1,9 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import TextField from '../../../../node_modules/material-ui/lib/text-field';
-import Paper from '../../../../node_modules/material-ui/lib/paper';
-import FlatButton from '../../../../node_modules/material-ui/lib/flat-button';
+import TextField from '../../../../node_modules/material-ui/TextField';
+import Paper from '../../../../node_modules/material-ui/Paper';
+import FlatButton from '../../../../node_modules/material-ui/FlatButton';
 import InlineCss from "react-inline-css";
 import merge from 'lodash.merge';
 

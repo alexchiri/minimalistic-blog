@@ -66,7 +66,7 @@ app.use(rss);
 
 app.use(function *(next) {
     // required by the material-ui lib
-    GLOBAL.navigator = {
+    global.navigator = {
         userAgent: this.request.headers['user-agent']
     };
 

@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
-import AppBar from '../../../../node_modules/material-ui/lib/app-bar';
-import LeftNav from '../../../../node_modules/material-ui/lib/left-nav';
-import MenuItem from '../../../../node_modules/material-ui/lib/menus/menu-item';
+import AppBar from '../../../../node_modules/material-ui/AppBar';
+import Drawer from '../../../../node_modules/material-ui/Drawer';
+import MenuItem from '../../../../node_modules/material-ui/MenuItem';
 
 export default class AppBarWithMenu extends Component {
     constructor(props) {
@@ -41,12 +41,12 @@ export default class AppBarWithMenu extends Component {
                     iconElementRight={ this.props.iconElementRight ? this.props.iconElementRight : null }
                 />
 
-                <LeftNav open={this.state.menuOpen}
+                <Drawer open={this.state.menuOpen}
                          onRequestChange={this.handleMenuToggle}
                          docked={false}>
                     <MenuItem onTouchTap={this.handlePostsClick}>Posts</MenuItem>
                     <MenuItem onTouchTap={this.handleMenuEditorClick}>Menu editor</MenuItem>
-                </LeftNav>
+                </Drawer>
             </div>
         );
     }

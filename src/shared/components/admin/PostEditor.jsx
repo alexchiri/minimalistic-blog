@@ -1,13 +1,12 @@
 import React, {Component, PropTypes} from 'react';
-import TextField from '../../../../node_modules/material-ui/lib/text-field';
-import RaisedButton from '../../../../node_modules/material-ui/lib/raised-button';
-import EnhancedTextarea from '../../../../node_modules/material-ui/lib/enhanced-textarea';
-import FloatingActionButton from '../../../../node_modules/material-ui/lib/floating-action-button';
-import AppBar from '../../../../node_modules/material-ui/lib/app-bar';
-import IconButton from '../../../../node_modules/material-ui/lib/icon-button';
-import NavigationClose from '../../../../node_modules/material-ui/lib/svg-icons/navigation/close';
-import FlatButton from '../../../../node_modules/material-ui/lib/flat-button';
-import Paper from '../../../../node_modules/material-ui/lib/paper';
+import TextField from '../../../../node_modules/material-ui/TextField';
+import EnhancedTextarea from '../../../../node_modules/material-ui/TextField/EnhancedTextarea';
+import FloatingActionButton from '../../../../node_modules/material-ui/FloatingActionButton';
+import AppBar from '../../../../node_modules/material-ui/AppBar';
+import IconButton from '../../../../node_modules/material-ui/IconButton';
+import NavigationClose from '../../../../node_modules/material-ui/svg-icons/navigation/close';
+import FlatButton from '../../../../node_modules/material-ui/FlatButton';
+import Paper from '../../../../node_modules/material-ui/Paper';
 import merge from 'lodash.merge';
 import {Map} from 'immutable';
 

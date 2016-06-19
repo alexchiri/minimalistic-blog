@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate';
 
+mongoose.Promise = global.Promise;
+
 var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
