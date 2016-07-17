@@ -5,9 +5,9 @@ import {Author, BlogPost} from '../storage/schemas';
 const router = koaRouter({prefix: '/api/posts'});
 const POSTS_PAGE_SIZE = parseInt(process.env.POSTS_PAGE_SIZE);
 
-function getPaginatedPosts(offset, limit) {
+function getPaginatedPosts(offset, limit, isPage) {
     return function (done) {
-        BlogPost.paginate({draft: false}, {
+        BlogPost.paginate({draft: false, isPage: isPage}, {
             offset: offset,
             limit: limit,
             lean: true,
@@ -56,7 +56,7 @@ router.get('/', function*(next) {
         offset = noPosts - POSTS_PAGE_SIZE
     }
 
-    let postsResult = yield getPaginatedPosts(offset, POSTS_PAGE_SIZE);
+    let postsResult = yield getPaginatedPosts(offset, POSTS_PAGE_SIZE, false);
     let postsData = { posts: [], offset: postsResult.offset, total: noPosts };
     let postDocs = postsResult.docs;
 

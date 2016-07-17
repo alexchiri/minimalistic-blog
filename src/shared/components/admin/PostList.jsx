@@ -1,11 +1,13 @@
 import React, {Component, PropTypes} from 'react';
-import List from '../../../../node_modules/material-ui/List';
-import ListItem from '../../../../node_modules/material-ui/List/ListItem';
-import FloatingActionButton from '../../../../node_modules/material-ui/FloatingActionButton';
-import FlatButton from '../../../../node_modules/material-ui/FlatButton';
-import Paper from '../../../../node_modules/material-ui/Paper';
-import Subheader from '../../../../node_modules/material-ui/Subheader';
-import MakeSelectable from '../../../../node_modules/material-ui/List/MakeSelectable';
+import List from 'material-ui/List';
+import ListItem from 'material-ui/List/ListItem';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import FlatButton from 'material-ui/FlatButton';
+import Paper from 'material-ui/Paper';
+import Subheader from 'material-ui/Subheader';
+import MakeSelectable from 'material-ui/List/MakeSelectable';
+import Toggle from 'material-ui/Toggle';
+
 import merge from 'lodash.merge';
 let SelectableList = MakeSelectable(List);
 
@@ -19,17 +21,22 @@ export default class PostList extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleEditClick = this.handleEditClick.bind(this);
         this.handleAddClick = this.handleAddClick.bind(this);
+        this.handleShowPostsChange = this.handleShowPostsChange.bind(this);
+        this.handleShowPagesChange = this.handleShowPagesChange.bind(this);
+        this.handleShowDraftsChange = this.handleShowDraftsChange.bind(this);
     }
 
     componentWillMount() {
-        this.setInitialDropDownState(this.props);
+        this.setInitialState(this.props);
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setInitialDropDownState(nextProps);
+        this.setInitialState(nextProps);
     }
 
-    setInitialDropDownState(props) {
+    setInitialState(props) {
+        this.setState(merge(this.state, { showPages: true, showPosts: true, showDrafts: true }));
+
         if(props.posts.size > 0 && !this.state) {
             if(props.post && props.post.size > 0) {
                 const postIndex = props.posts.findIndex(function (post) {
@@ -49,6 +56,18 @@ export default class PostList extends Component {
         this.props.getAdminPost(this.props.posts.get(index).get('slug'));
     }
 
+    handleShowPostsChange(e, value) {
+        this.setState(merge(this.state, { showPosts: value }));
+    }
+
+    handleShowPagesChange(e, value) {
+        this.setState(merge(this.state, { showPages: value }));
+    }
+
+    handleShowDraftsChange(e, value) {
+        this.setState(merge(this.state, { showDrafts: value }));
+    }
+
     handleEditClick() {
         let slug = this.props.posts.get(this.state.selectedIndex).get('slug');
 
@@ -61,7 +80,11 @@ export default class PostList extends Component {
 
     render() {
         let content = <div>Loading...</div>;
-        let postsInfo = this.props.posts;
+        let postsInfo = this.props.posts.filter((post) => {
+            return (this.state.showPosts ===  true && (typeof post.get('isPage') === 'undefined' || post.get('isPage') === false)) ||
+                (this.state.showPages === true && (typeof post.get('isPage') !== 'undefined' && post.get('isPage') === true))  ||
+                (this.state.showDrafts === true && (typeof post.get('draft') !== 'undefined' && post.get('draft') === true));
+        });
         let postContent = this.props.post;
         let iconElementRight = <FlatButton label="Edit" onClick={this.handleEditClick}/>;
 
@@ -83,9 +106,26 @@ export default class PostList extends Component {
                                     right: "0px",
                                     overflow: "auto"}}
                            zDepth={1}>
+                        <div style={{width: '90%', marginLeft: '15px', marginTop: '15px'}}>
+                            <Toggle
+                                label="Posts"
+                                toggled={this.state.showPosts}
+                                onToggle={this.handleShowPostsChange}
+                            />
+                            <Toggle
+                                label="Pages"
+                                toggled={this.state.showPages}
+                                onToggle={this.handleShowPagesChange}
+                            />
+                            <Toggle
+                                label="Drafts"
+                                toggled={this.state.showDrafts}
+                                onToggle={this.handleShowDraftsChange}
+                            />
+                        </div>
                         <SelectableList value={this.state.selectedIndex} onChange={this.handleChange}>
+                            <Subheader>Posts and pages</Subheader>
                             {items}
-                            <Subheader>Posts</Subheader>
                         </SelectableList>
                     </Paper>
                     <PostPreview post={postContent}/>

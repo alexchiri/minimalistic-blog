@@ -15,7 +15,8 @@ var BlogPostSchema = new Schema({
     image: String,
     date_published: Date,
     date_updated: Date,
-    draft: Boolean
+    draft: Boolean,
+    isPage: Boolean
 });
 
 var MenuItemSchema = new Schema({

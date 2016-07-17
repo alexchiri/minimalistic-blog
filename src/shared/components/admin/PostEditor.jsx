@@ -1,12 +1,13 @@
 import React, {Component, PropTypes} from 'react';
-import TextField from '../../../../node_modules/material-ui/TextField';
-import EnhancedTextarea from '../../../../node_modules/material-ui/TextField/EnhancedTextarea';
-import FloatingActionButton from '../../../../node_modules/material-ui/FloatingActionButton';
-import AppBar from '../../../../node_modules/material-ui/AppBar';
-import IconButton from '../../../../node_modules/material-ui/IconButton';
-import NavigationClose from '../../../../node_modules/material-ui/svg-icons/navigation/close';
-import FlatButton from '../../../../node_modules/material-ui/FlatButton';
-import Paper from '../../../../node_modules/material-ui/Paper';
+import TextField from 'material-ui/TextField';
+import EnhancedTextarea from 'material-ui/TextField/EnhancedTextarea';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import AppBar from 'material-ui/AppBar';
+import IconButton from 'material-ui/IconButton';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import FlatButton from 'material-ui/FlatButton';
+import Paper from 'material-ui/Paper';
+import Toggle from 'material-ui/Toggle';
 import merge from 'lodash.merge';
 import {Map} from 'immutable';
 
@@ -21,6 +22,8 @@ export default class PostEditor extends Component {
         this.handleSaveClick = this.handleSaveClick.bind(this);
         this.handleCancelClick = this.handleCancelClick.bind(this);
         this.handlePublishClick = this.handlePublishClick.bind(this);
+        this.handleIsPageChange = this.handleIsPageChange.bind(this);
+        this.handleSlugChange = this.handleSlugChange.bind(this);
     }
 
     componentWillMount() {
@@ -53,7 +56,8 @@ export default class PostEditor extends Component {
             title: post.get('title') ? post.get('title') : '',
             link: post.get('link') ? post.get('link') : '',
             image: post.get('image') ? post.get('image') : '',
-            slug: post.get('slug') ? post.get('slug') : ''
+            slug: post.get('slug') ? post.get('slug') : '',
+            isPage: post.get('isPage') ? post.get('isPage') : false
         }
     }
 
@@ -71,6 +75,14 @@ export default class PostEditor extends Component {
 
     handleImageChange(event) {
         this.setState(merge(this.state, {image: event.target.value}));
+    }
+
+    handleIsPageChange(event, value) {
+        this.setState(merge(this.state, {isPage: value}));
+    }
+
+    handleSlugChange(event) {
+        this.setState(merge(this.state, {slug: event.target.value}));
     }
 
     handleSaveClick() {
@@ -127,12 +139,19 @@ export default class PostEditor extends Component {
                             overflow: "auto",
                             padding: "10px"}}
                         zDepth={1}>
+                        <Toggle
+                            label="Is it a page?"
+                            toggled={this.state.isPage}
+                            onToggle={this.handleIsPageChange}
+                        />
                         <TextField
                             hintText="Title" ref="title" value={this.state.title} onChange={this.handleTitleChange} style={{width: "100%"}}/><br/>
                         <TextField
                             hintText="Link" ref="link" value={this.state.link} onChange={this.handleLinkChange} style={{width: "100%"}} /><br/>
                         <TextField
                             hintText="Image url" ref="image" value={this.state.image} onChange={this.handleImageChange} style={{width: "100%"}} /><br/>
+                        <TextField
+                            hintText="Slug" ref="slug" value={this.state.slug} onChange={this.handleSlugChange} style={{width: "100%"}}/><br/>
                         <EnhancedTextarea value={this.state.content} onChange={this.handleContentChange}/>
                     </Paper>
 

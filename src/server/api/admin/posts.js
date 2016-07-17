@@ -14,7 +14,7 @@ function getAllPostsInfo() {
     return function(done) {
         BlogPost.find({})
             .lean()
-            .select("title slug date_published date_updated draft -_id")
+            .select("title slug date_published date_updated draft isPage -_id")
             .sort({ date_published: -1 })
             .exec(function(err, posts) {
                 done(err, posts);
@@ -26,7 +26,7 @@ function getPostContent(slug) {
     return function(done) {
         BlogPost.findOne({slug: slug})
             .lean()
-            .select("content slug title link image draft date_published date_updated -_id")
+            .select("content slug title link image draft date_published date_updated isPage -_id")
             .exec(function(err, posts) {
                 done(err, posts);
             });
@@ -99,7 +99,9 @@ router.post('/', function*(next) {
 
     let postInfo = yield parse.json(this);
     if(postInfo.title) {
-        postInfo.slug = getSlug(postInfo.title);
+        if(!postInfo.slug) {
+            postInfo.slug = getSlug(postInfo.title);
+        }
         postInfo.date_updated = Date.now();
         postInfo.author = mongoose.Types.ObjectId(authorData.author);
 
