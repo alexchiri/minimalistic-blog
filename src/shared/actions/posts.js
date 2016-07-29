@@ -8,10 +8,10 @@ export const GET_POST_REQUEST = "GET_POST_REQUEST";
 export const GET_POST_SUCCESS = "GET_POST_SUCCESS";
 export const GET_POST_FAILURE = "GET_POST_FAILURE";
 
-export function getPosts(offset) {
+export function getPosts(offset, tag) {
     return {
         [CALL_API]: {
-            endpoint: '/api/posts?offset=' + offset,
+            endpoint: '/api/posts?offset=' + offset + (typeof tag !== 'undefined' ? '&tag=' + tag: ''),
             method: 'GET',
             types: [GET_POSTS_REQUEST, GET_POSTS_SUCCESS, GET_POSTS_FAILURE]
         }

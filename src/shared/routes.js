@@ -22,6 +22,7 @@ export default (store, history) => {
                            <IndexRoute component={HomeContainer}/>
                            <Route path="post/:slug" component={PostPage}/>
                            <Route path="page/:slug" component={PostPage}/>
+                           <Route path="tag/:tag" component={HomeContainer}/>
                        { /* <Route path="*" component={NotFound} status={404} /> */ }
                 </Route>
 

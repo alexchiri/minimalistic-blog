@@ -10,7 +10,12 @@ export class Home extends Component {
     constructor(props) {
         super(props);
 
-        this.props.getPosts(this.props.offset);
+        const {
+            offset,
+            params: {tag}
+        } = this.props;
+
+        this.props.getPosts(offset, tag);
     }
 
     render() {
