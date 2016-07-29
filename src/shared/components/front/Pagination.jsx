@@ -10,12 +10,12 @@ export default class Pagination extends Component {
 
     getOlderPosts() {
         let newOffset = this.props.offset - this.props.pageSize;
-        this.props.getPosts(newOffset);
+        this.props.getPosts(newOffset, this.props.params.tag);
     }
 
     getNewerPosts() {
         let newOffset = this.props.offset + this.props.pageSize;
-        this.props.getPosts(newOffset);
+        this.props.getPosts(newOffset, this.props.params.tag);
     }
 
     render() {

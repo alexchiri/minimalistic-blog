@@ -5,41 +5,49 @@ import {Author, BlogPost} from '../storage/schemas';
 const router = koaRouter({prefix: '/api/posts'});
 const POSTS_PAGE_SIZE = parseInt(process.env.POSTS_PAGE_SIZE);
 
-function getPaginatedPosts(offset, limit, isPage) {
-    return function (done) {
-        BlogPost.paginate({draft: false, isPage: isPage}, {
-            offset: offset,
-            limit: limit,
-            lean: true,
-            populate: { path: 'author', model: Author, select: "first_name last_name"},
-            select: "-id -_id -__v",
-            sort: {date_published: -1}
-        }, function (err, result) {
-            done(err, result);
-        })
+function getPaginatedPosts(offset, limit, isPage, tag) {
+    if(typeof tag !== 'undefined') {
+        return function (done) {
+            BlogPost.paginate({draft: false, isPage: isPage, tags: new RegExp(tag, 'i')}, {
+                offset: offset,
+                limit: limit,
+                lean: true,
+                populate: { path: 'author', model: Author, select: "first_name last_name"},
+                select: "-id -_id -__v",
+                sort: {date_published: -1}
+            }, function (err, result) {
+                done(err, result);
+            })
+        }
+    } else {
+        return function (done) {
+            BlogPost.paginate({draft: false, isPage: isPage}, {
+                offset: offset,
+                limit: limit,
+                lean: true,
+                populate: { path: 'author', model: Author, select: "first_name last_name"},
+                select: "-id -_id -__v",
+                sort: {date_published: -1}
+            }, function (err, result) {
+                done(err, result);
+            })
+        }
     }
 }
 
-function getPaginatedTaggedPosts(offset, limit, isPage, tag) {
-    return function (done) {
-        BlogPost.paginate({draft: false, isPage: isPage, tags: new RegExp(tag, 'i')}, {
-            offset: offset,
-            limit: limit,
-            lean: true,
-            populate: { path: 'author', model: Author, select: "first_name last_name"},
-            select: "-id -_id -__v",
-            sort: {date_published: -1}
-        }, function (err, result) {
-            done(err, result);
-        })
-    }
-}
-
-function getPublishedPostsCount() {
-    return function(done) {
-        BlogPost.count({draft: false}, function(err, count) {
-            done(err, count);
-        })
+function getPublishedPostsCount(tag) {
+    if(typeof tag !== 'undefined') {
+        return function(done) {
+            BlogPost.count({draft: false, tags: new RegExp(tag, 'i')}, function(err, count) {
+                done(err, count);
+            })
+        }
+    } else {
+        return function(done) {
+            BlogPost.count({draft: false}, function(err, count) {
+                done(err, count);
+            })
+        }
     }
 }
 
@@ -67,18 +75,13 @@ router.get('/', function*(next) {
         offset = 0;
     }
 
-    let noPosts = yield getPublishedPostsCount();
+    let noPosts = yield getPublishedPostsCount(tag);
 
     if(offset >= noPosts) {
         offset = noPosts - POSTS_PAGE_SIZE
     }
 
-    let postsResult = [];
-    if(typeof tag !== 'undefined') {
-        postsResult = yield getPaginatedTaggedPosts(offset, POSTS_PAGE_SIZE, false, tag);
-    } else {
-        postsResult = yield getPaginatedPosts(offset, POSTS_PAGE_SIZE, false)
-    }
+    let postsResult = yield getPaginatedPosts(offset, POSTS_PAGE_SIZE, false, tag);
 
     let postsData = { posts: [], offset: postsResult.offset, total: noPosts };
     let postDocs = postsResult.docs;
