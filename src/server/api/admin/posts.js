@@ -14,7 +14,7 @@ function getAllPostsInfo() {
     return function(done) {
         BlogPost.find({})
             .lean()
-            .select("title slug date_published date_updated draft isPage -_id")
+            .select("title slug date_published date_updated draft tags isPage -_id")
             .sort({ date_published: -1 })
             .exec(function(err, posts) {
                 done(err, posts);
@@ -26,7 +26,7 @@ function getPostContent(slug) {
     return function(done) {
         BlogPost.findOne({slug: slug})
             .lean()
-            .select("content slug title link image draft date_published date_updated isPage -_id")
+            .select("content slug title link image draft date_published date_updated tags isPage -_id")
             .exec(function(err, posts) {
                 done(err, posts);
             });
@@ -75,7 +75,9 @@ router.put('/:slug', function*(next) {
             title: postInfo.title ? postInfo.title : null,
             image: postInfo.image ? postInfo.image : null,
             link: postInfo.link ? postInfo.link : null,
-            content: postInfo.content ? postInfo.content: null
+            content: postInfo.content ? postInfo.content: null,
+            isPage: postInfo.isPage ? postInfo.isPage: false,
+            tags: postInfo.tags ? postInfo.tags: null,
         };
         let updateResult = yield updatePost(slug, post);
 

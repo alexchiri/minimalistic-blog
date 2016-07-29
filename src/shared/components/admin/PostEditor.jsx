@@ -24,6 +24,7 @@ export default class PostEditor extends Component {
         this.handlePublishClick = this.handlePublishClick.bind(this);
         this.handleIsPageChange = this.handleIsPageChange.bind(this);
         this.handleSlugChange = this.handleSlugChange.bind(this);
+        this.handleTagsChange = this.handleTagsChange.bind(this);
     }
 
     componentWillMount() {
@@ -57,6 +58,7 @@ export default class PostEditor extends Component {
             link: post.get('link') ? post.get('link') : '',
             image: post.get('image') ? post.get('image') : '',
             slug: post.get('slug') ? post.get('slug') : '',
+            tags: post.get('tags') ? post.get('tags') : '',
             isPage: post.get('isPage') ? post.get('isPage') : false
         }
     }
@@ -83,6 +85,10 @@ export default class PostEditor extends Component {
 
     handleSlugChange(event) {
         this.setState(merge(this.state, {slug: event.target.value}));
+    }
+
+    handleTagsChange(event) {
+        this.setState(merge(this.state, {tags: event.target.value}));
     }
 
     handleSaveClick() {
@@ -152,6 +158,8 @@ export default class PostEditor extends Component {
                             hintText="Image url" ref="image" value={this.state.image} onChange={this.handleImageChange} style={{width: "100%"}} /><br/>
                         <TextField
                             hintText="Slug" ref="slug" value={this.state.slug} onChange={this.handleSlugChange} style={{width: "100%"}}/><br/>
+                        <TextField
+                            hintText="Tags" ref="tags" value={this.state.tags} onChange={this.handleTagsChange} style={{width: "100%"}}/><br/>
                         <EnhancedTextarea value={this.state.content} onChange={this.handleContentChange}/>
                     </Paper>
 
