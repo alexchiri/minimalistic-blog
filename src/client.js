@@ -1,5 +1,4 @@
 import React from 'react';
-import {Router} from 'react-router';
 import createRoutes from './shared/routes';
 import rootReducer from './shared/reducers/root';
 import ReactDOM from 'react-dom';

@@ -22,7 +22,7 @@ module.exports = {
             }
         }),
         new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin()
     ],
     module: {
@@ -34,16 +34,15 @@ module.exports = {
                 exclude: /node_modules/
             }
         ],
-        postLoaders: [],
         noParse: /\.min\.js/
     },
     resolve: {
-        modulesDirectories: [
+        modules: [
             "src",
             "node_modules",
             "web_modules"
         ],
-        extensions: ["", ".json", ".js", ".jsx"]
+        extensions: [".json", ".js", ".jsx"]
     },
     node: {
         __dirname: true,
